@@ -1,10 +1,10 @@
 ---
 description: Explains the differences between the [psobject] and [pscustomobject] type accelerators.
 Locale: en-US
-ms.date: 12/05/2022
+ms.date: 07/02/2024
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_PSCustomObject?view=powershell-7.2&WT.mc_id=ps-gethelp
 schema: 2.0.0
-title: about PSCustomObject
+title: about_PSCustomObject
 ---
 # about_PSCustomObject
 
@@ -186,8 +186,7 @@ While, casting an object to `[psobject]` appears to have no affect on the type,
 PowerShell adds an _invisible_ `[psobject]` wrapper around the object. This can
 have subtle side effects.
 
-- Wrapped objects will match their original type and the
-  `[psobject]` type.
+- Wrapped objects match their original type and the `[psobject]` type.
 
   ```powershell
   PS> 1 -is [Int32]
@@ -211,10 +210,61 @@ have subtle side effects.
   to zero and less than the size of the argument list..
   ```
 
+## Conversion of hashtables containing similar keys
+
+Case-sensitive dictionaries might contain key names that only differ by case.
+When you cast such a dictionary to a `[pscustomobject]`, PowerShell preserves
+that case of the keys but isn't case-sensitive. As a result:
+
+- The case of the first duplicate key becomes the name of that key.
+- The value of the last case-variant key becomes the property value.
+
+The following example demonstrates this behavior:
+
+```powershell
+$Json = '{
+  "One": 1,
+  "two": 2,
+  "Two": 3,
+  "three": 3,
+  "Three": 4,
+  "THREE": 5
+}'
+$OrderedHashTable = $Json | ConvertFrom-Json -AsHashTable
+$OrderedHashTable
+```
+
+Notice that the ordered hashtable contains multiple keys that differ only by
+case.
+
+```Output
+Name                           Value
+----                           -----
+One                            1
+two                            2
+Two                            3
+three                          3
+Three                          4
+THREE                          5
+```
+
+When that hashtable is cast to a `[pscustomobject]`, the case of the name of
+first key is used, but that value of the last matching key name is used.
+
+```powershell
+[PSCustomObject]$OrderedHashTable
+```
+
+```Output
+One two three
+--- --- -----
+  1   3     5
+```
+
 ## Notes
 
 In Windows PowerShell, objects created by casting a **Hashtable** to
-`[pscustomobject]` do not have the **Length** or **Count** properties.
+`[pscustomobject]` don't have the **Length** or **Count** properties.
 Attempting to access these members returns `$null`.
 
 For example:
@@ -230,6 +280,10 @@ value
 PS> $object.Count
 PS> $object.Length
 ```
+
+Starting in PowerShell 6, objects created by casting a **Hashtable** to
+`[pscustomobject]` always have a value of `1` for the **Length** and **Count**
+properties.
 
 ## See also
 

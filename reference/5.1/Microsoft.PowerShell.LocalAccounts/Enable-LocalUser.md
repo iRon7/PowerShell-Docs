@@ -2,7 +2,7 @@
 external help file: Microsoft.Powershell.LocalAccounts.dll-Help.xml
 Locale: en-US
 Module Name: Microsoft.PowerShell.LocalAccounts
-ms.date: 12/13/2022
+ms.date: 06/28/2023
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.localaccounts/enable-localuser?view=powershell-5.1&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: Enable-LocalUser
@@ -173,13 +173,17 @@ This cmdlet returns no output.
 
 ## NOTES
 
-- The **PrincipalSource** property is a property on **LocalUser**, **LocalGroup**, and
-  **LocalPrincipal** objects that describes the source of the object. The possible sources are as
-  follows:
+Windows PowerShell includes the following aliases for `Enable-LocalUser`:
+
+- `elu`
+
+The **PrincipalSource** property is a property on **LocalUser**, **LocalGroup**, and
+**LocalPrincipal** objects that describes the source of the object. The possible sources are as
+follows:
 
 - Local
 - Active Directory
-- Azure Active Directory group
+- Microsoft Entra group
 - Microsoft Account
 
 **PrincipalSource** is supported only by Windows 10, Windows Server 2016, and later versions of the

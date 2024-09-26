@@ -2,7 +2,7 @@
 external help file: Microsoft.PowerShell.Commands.Management.dll-Help.xml
 Locale: en-US
 Module Name: Microsoft.PowerShell.Management
-ms.date: 02/16/2023
+ms.date: 02/23/2024
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.management/new-item?view=powershell-5.1&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: New-Item
@@ -221,7 +221,7 @@ Mode                LastWriteTime         Length Name
 ### Example 9: Use the -Force parameter to overwrite existing files
 
 This example creates a file with a value and then recreates the file using `-Force`. This overwrites
-The existing file and it will lose it's content as you can see by the length property
+the existing file, as you can see by the length property.
 
 ```powershell
 PS> New-Item ./TestFile.txt -ItemType File -Value 'This is just a test file'
@@ -264,7 +264,7 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
-Accept pipeline input: ByValue (False), ByName (False)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -285,7 +285,7 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
-Accept pipeline input: ByValue (False), ByName (False)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -307,7 +307,7 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
-Accept pipeline input: ByValue (False), ByName (False)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -328,7 +328,7 @@ Aliases:
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: ByValue (False), ByName (False)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -355,6 +355,10 @@ Accept wildcard characters: False
 Forces this cmdlet to create an item that writes over an existing read-only item. Implementation
 varies from provider to provider. Even using the **Force** parameter, the cmdlet can't override
 security restrictions.
+
+You can't use **Force** to overwrite an existing Junction. Attempts to overwrite an existing
+Junction fail with a "cannot be removed because it is not empty" error. You must remove the
+existing Junction before creating a new one.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -448,7 +452,7 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
-Accept pipeline input: ByValue (False), ByName (False)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -469,7 +473,7 @@ Aliases: OS
 Required: False
 Position: Named
 Default value: None
-Accept pipeline input: ByValue (False), ByName (False)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -514,7 +518,7 @@ Aliases:
 Required: False False
 Position: Named
 Default value: None
-Accept pipeline input: ByValue (System.Object[]), ByName (System.Object[])
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -535,7 +539,7 @@ Aliases: SO
 Required: False
 Position: Named
 Default value: None
-Accept pipeline input: ByValue (False), ByName (False)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -641,9 +645,29 @@ You can pipe a value for the new item to this cmdlet.
 
 ## OUTPUTS
 
-### System.Object
+### System.Collections.DictionaryEntry
 
-This cmdlet returns the item that it creates.
+The cmdlet returns a **DictionaryEntry** object when creating a new environment variable.
+
+### System.IO.DirectoryInfo
+
+The cmdlet returns a **DirectoryInfo** object when creating a new directory in the filesystem.
+
+### System.IO.FileInfo
+
+The cmdlet returns a **FileInfo** object when creating a new file in the filesystem.
+
+### System.Management.Automation.AliasInfo
+
+The cmdlet returns an **AliasInfo** object when creating a new alias.
+
+### System.Management.Automation.FunctionInfo
+
+The cmdlet returns a **FunctionInfo** object when creating a new function.
+
+### System.Management.Automation.PSVariable
+
+The cmdlet returns a **PSVariable** object when creating a new variable.
 
 ## NOTES
 

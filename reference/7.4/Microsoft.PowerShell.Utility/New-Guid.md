@@ -2,7 +2,7 @@
 external help file: Microsoft.PowerShell.Commands.Utility.dll-Help.xml
 Locale: en-US
 Module Name: Microsoft.PowerShell.Utility
-ms.date: 10/04/2021
+ms.date: 01/24/2024
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.utility/new-guid?view=powershell-7.4&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: New-Guid
@@ -14,6 +14,7 @@ Creates a GUID.
 
 ## SYNTAX
 
+### Default (Default)
 ```
 New-Guid [<CommonParameters>]
 ```
@@ -25,7 +26,7 @@ a script, you can create a GUID, as needed.
 
 ## EXAMPLES
 
-### Example 1: Create a GUID
+### Example 1: Create a new GUID
 
 ```powershell
 New-Guid
@@ -40,7 +41,8 @@ variable to use elsewhere in a script.
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
 -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose,
--WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](../Microsoft.PowerShell.Core/About/about_CommonParameters.md).
+-WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](../Microsoft.PowerShell.Core/About/about_CommonParameters.md).
 
 ## INPUTS
 
@@ -51,5 +53,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 This cmdlet returns a GUID.
 
 ## NOTES
+
+The cmdlet creates a Version 4 Universally Unique Identifier (UUID). For more information, see
+[System.Guid.NewGuid](xref:System.Guid.NewGuid).
 
 ## RELATED LINKS

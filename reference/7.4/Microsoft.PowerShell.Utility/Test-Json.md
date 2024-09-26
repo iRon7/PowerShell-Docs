@@ -2,7 +2,7 @@
 external help file: Microsoft.PowerShell.Commands.Utility.dll-Help.xml
 Locale: en-US
 Module Name: Microsoft.PowerShell.Utility
-ms.date: 12/12/2022
+ms.date: 07/24/2024
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.utility/test-json?view=powershell-7.4&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: Test-Json
@@ -15,19 +15,58 @@ Tests whether a string is a valid JSON document
 
 ## SYNTAX
 
-### __AllParameterSets (Default)
+### JsonString (Default)
+
 ```
 Test-Json [-Json] <String> [<CommonParameters>]
 ```
 
-### SchemaString
+### JsonStringWithSchemaString
+
 ```
-Test-Json [-Json] <String> [[-Schema] <String>] [<CommonParameters>]
+Test-Json [-Json] <string> [-Schema] <string> [<CommonParameters>]
 ```
 
-### SchemaFile
+### JsonStringWithSchemaFile
+
 ```
-Test-Json [-Json] <String> [-SchemaFile <String>] [<CommonParameters>]
+Test-Json [-Json] <string> [-SchemaFile] <string> [<CommonParameters>]
+```
+
+### JsonPath
+
+```
+Test-Json [-Path] <string> [<CommonParameters>]
+```
+
+### JsonPathWithSchemaString
+
+```
+Test-Json [-Path] <string> [-Schema] <string> [<CommonParameters>]
+```
+
+### JsonPathWithSchemaFile
+
+```
+Test-Json [-Path] <string> [-SchemaFile] <string> [<CommonParameters>]
+```
+
+### JsonLiteralPath
+
+```
+Test-Json [-LiteralPath] <string> [<CommonParameters>]
+```
+
+### JsonLiteralPathWithSchemaString
+
+```
+Test-Json [-LiteralPath] <string> [-Schema] <string> [<CommonParameters>]
+```
+
+### JsonLiteralPathWithSchemaFile
+
+```
+Test-Json [-LiteralPath] <string> [-SchemaFile] <string> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -51,7 +90,7 @@ This cmdlet was introduced in PowerShell 6.1
 This example tests whether the input string is a valid JSON document.
 
 ```powershell
-"{'name': 'Ashley', 'age': 25}" | Test-Json
+'{"name": "Ashley", "age": 25}' | Test-Json
 ```
 
 ```Output
@@ -97,16 +136,15 @@ $schema = @'
   }
 }
 '@
-"{'name': 'Ashley', 'age': '25'}" | Test-Json -Schema $schema
+'{"name": "Ashley", "age": "25"}' | Test-Json -Schema $schema
 ```
 
 ```Output
-Test-Json : IntegerExpected: #/age
-At line:1 char:37
-+ "{'name': 'Ashley', 'age': '25'}" | Test-Json -Schema $schema
-+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~
-+ CategoryInfo          : InvalidData: (:) [Test-Json], Exception
-+ FullyQualifiedErrorId : InvalidJsonAgainstSchema,Microsoft.PowerShell.Commands.TestJsonCommand
+Test-Json:
+Line |
+  35 |  '{"name": "Ashley", "age": "25"}' | Test-Json -Schema $schema
+     |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+     | The JSON is not valid with the schema: Value is "string" but should be "integer" at '/age'
 False
 ```
 
@@ -121,11 +159,13 @@ JSON schema can reference definitions using `$ref` keyword. The `$ref` can resol
 references another file. The **SchemaFile** parameter accepts literal path to the JSON schema file
 and allows JSON files to be validated against such schemas.
 
-In this example we have `schema.json` file which references `definitions.json`.
+In this example the `schema.json` file references `definitions.json`.
 
 ```powershell
-PS> Get-Content schema.json
+Get-Content schema.json
+```
 
+```Output
 {
   "description":"A person",
   "type":"object",
@@ -138,9 +178,13 @@ PS> Get-Content schema.json
     }
   }
 }
+```
 
-PS> Get-Content definitions.json
+```powershell
+Get-Content definitions.json
+```
 
+```Output
 {
   "definitions":{
     "name":{
@@ -154,7 +198,9 @@ PS> Get-Content definitions.json
     }
   }
 }
+```
 
+```powershell
 '{"name": "James", "hobbies": [".NET", "Blogging"]}' | Test-Json -SchemaFile 'schema.json'
 ```
 
@@ -176,19 +222,59 @@ The **Json** parameter is required.
 
 ```yaml
 Type: System.String
-Parameter Sets: (All)
+Parameter Sets: JsonString, JsonStringWithSchemaString, JsonStringWithSchemaFile
 Aliases:
 
 Required: True
-Position: 1
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
+### -LiteralPath
+
+Specifies a path to a JSON file. The value of **LiteralPath** is used exactly as it's typed. No
+characters are interpreted as wildcards. If the path includes escape characters, enclose it in
+single quotation marks. Single quotation marks tell PowerShell not to interpret any characters as
+escape sequences.
+
+This parameter was added in PowerShell 7.4.
+
+```yaml
+Type: System.String
+Parameter Sets: JsonLiteralPath, JsonLiteralPathWithSchemaString, JsonLiteralPathWithSchemaFile
+Aliases: PSPath, LP
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Path
+
+Specifies the path to a JSON file. This cmdlet gets the item at the specified location. Wildcard
+characters are permitted but the pattern must resolve to a single file.
+
+This parameter was added in PowerShell 7.4.
+
+```yaml
+Type: System.String
+Parameter Sets: JsonPath, JsonPathWithSchemaString, JsonPathWithSchemaFile
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: True
+```
+
 ### -Schema
 
-Specifies a schema to validate the JSON input against. If passed, `Test-Json` will validate that the
+Specifies a schema to validate the JSON input against. If passed, `Test-Json` validates that the
 JSON input conforms to the spec specified by the **Schema** parameter and return `$true` only if the
 input conforms to the provided schema.
 
@@ -196,11 +282,11 @@ For more information, see [JSON Schema](https://json-schema.org/).
 
 ```yaml
 Type: System.String
-Parameter Sets: SchemaString
+Parameter Sets: JsonStringWithSchemaString, JsonLiteralPathWithSchemaString, JsonPathWithSchemaString
 Aliases:
 
-Required: False
-Position: 2
+Required: True
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -216,11 +302,11 @@ For more information, see [JSON Schema](https://json-schema.org/).
 
 ```yaml
 Type: System.String
-Parameter Sets: SchemaFile
+Parameter Sets: JsonStringWithSchemaFile, JsonLiteralPathWithSchemaFile, JsonPathWithSchemaFile
 Aliases:
 
-Required: False
-Position: Named
+Required: True
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -237,7 +323,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.String
 
-You can pipe a JSON string to to this cmdlet.
+You can pipe a JSON string to this cmdlet.
 
 ## OUTPUTS
 
@@ -247,13 +333,24 @@ This cmdlet returns `$true` if the JSON is valid and otherwise `$false`.
 
 ## NOTES
 
-The `Test-Json` cmdlet is implemented by using the
-[NJsonSchema Class](https://github.com/RSuter/NJsonSchema).
-
-Since PowerShell 6, PowerShell uses the Newtonsoft.Json assemblies for all JSON functions.
-Newtonsoft's implementation includes several extensions to the JSON standard, such as support for
-comments and use of single quotes. For a full list of features, see the Newtonsoft documentation at
+Since PowerShell 6, PowerShell uses the Newtonsoft.Json assemblies for JSON functions. Newtonsoft's
+implementation includes several extensions to the JSON standard, such as support for comments and
+use of single quotes. For a full list of features, see the Newtonsoft documentation at
 [https://www.newtonsoft.com/json](https://www.newtonsoft.com/json).
+
+Beginning in PowerShell 7.4, `Test-Json` uses [System.Text.Json](xref:System.Text.Json) for JSON
+parsing and [JsonSchema.NET](https://www.nuget.org/packages/JsonSchema.Net) for schema validation.
+With these changes, `Test-Json`:
+
+- No longer supports Draft 4 schemas
+- Only supports strictly conformant JSON
+
+For a complete list of differences between Newtonsoft.Json and System.Text.Json, see the
+_Table of differences_ in
+[Migrate from Newtonsoft.Json to System.Text.Json](/dotnet/standard/serialization/system-text-json/migrate-from-newtonsoft?pivots=dotnet-8-0#table-of-differences).
+
+For more information about JSON schema specifications, see the documentation at
+[JSON-Schema.org](https://json-schema.org/specification.html).
 
 ## RELATED LINKS
 

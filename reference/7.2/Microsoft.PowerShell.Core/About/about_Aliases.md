@@ -5,11 +5,12 @@ ms.date: 11/27/2017
 no-loc: [Authenticode, Alias]
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_aliases?view=powershell-7.2&WT.mc_id=ps-gethelp
 schema: 2.0.0
-title: about Aliases
+title: about_Aliases
 ---
 # about_Aliases
 
 ## Short description
+
 Describes how to use alternate names for cmdlets and commands in PowerShell.
 
 ## Long description
@@ -46,7 +47,7 @@ If you create `word` as the alias for Microsoft Office Word, you can type
 "C:\Program Files\Microsoft Office\Office11\Winword.exe"
 ```
 
-## Built in aliases
+## Built-in aliases
 
 PowerShell includes a set of built-in aliases, including `cd` and `chdir` for
 the `Set-Location` cmdlet, `ls` and `dir` on Windows and `dir` on Linux and

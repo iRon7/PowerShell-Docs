@@ -2,7 +2,7 @@
 external help file: Microsoft.PowerShell.PSReadLine2.dll-Help.xml
 Locale: en-US
 Module Name: PSReadLine
-ms.date: 12/13/2022
+ms.date: 10/11/2023
 online version: https://learn.microsoft.com/powershell/module/psreadline/get-psreadlineoption?view=powershell-7.4&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: Get-PSReadLineOption
@@ -22,9 +22,9 @@ Get-PSReadLineOption [<CommonParameters>]
 ## DESCRIPTION
 
 The `Get-PSReadLineOption` cmdlet returns the current state of the settings that can be configured
-by using the `Set-PSReadLineOption` cmdlet. You can use the returned object to change
-**PSReadLine** options. This provides a slightly simpler way to set syntax coloring options for
-multiple kinds of tokens.
+using the `Set-PSReadLineOption` cmdlet. You can use the returned object to change **PSReadLine**
+options. This provides a slightly simpler way to set syntax coloring options for multiple kinds of
+tokens.
 
 ## EXAMPLES
 
@@ -38,8 +38,7 @@ Get-PSReadLineOption
 EditMode                               : Windows
 AddToHistoryHandler                    : System.Func`2[System.String,System.Object]
 HistoryNoDuplicates                    : True
-HistorySavePath                        : C:\Users\username\AppData\Roaming\Microsoft\Windows\
-                                         PowerShell\PSReadLine\ConsoleHost_history.txt
+HistorySavePath                        : C:\Users\user1\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt
 HistorySaveStyle                       : SaveIncrementally
 HistorySearchCaseSensitive             : False
 HistorySearchCursorMovesToEnd          : False
@@ -50,26 +49,33 @@ PromptText                             : {> }
 BellStyle                              : Audible
 DingDuration                           : 50
 DingTone                               : 1221
-CommandsToValidateScriptBlockArguments : {ForEach-Object, %, Invoke-Command, icm...}
+CommandsToValidateScriptBlockArguments : {ForEach-Object, %, Invoke-Command, icm…}
 CommandValidationHandler               :
 CompletionQueryItems                   : 100
 MaximumKillRingCount                   : 10
 ShowToolTips                           : True
 ViModeIndicator                        : None
-WordDelimiters                         : ;:,.[]{}()/\|^&*-=+'"---
+WordDelimiters                         : ;:,.[]{}()/\|!?^&*-=+'"–—―
 AnsiEscapeTimeout                      : 100
+PredictionSource                       : HistoryAndPlugin
+PredictionViewStyle                    : InlineView
+TerminateOrphanedConsoleApps           : False
 CommandColor                           : "`e[93m"
 CommentColor                           : "`e[32m"
-ContinuationPromptColor                : "`e[97m"
-DefaultTokenColor                      : "`e[97m"
+ContinuationPromptColor                : "`e[37m"
+DefaultTokenColor                      : "`e[37m"
 EmphasisColor                          : "`e[96m"
 ErrorColor                             : "`e[91m"
+InlinePredictionColor                  : "`e[97;2;3m"
 KeywordColor                           : "`e[92m"
-MemberColor                            : "`e[97m"
+ListPredictionColor                    : "`e[33m"
+ListPredictionSelectedColor            : "`e[48;5;238m"
+ListPredictionTooltipColor             : "`e[97;2;3m"
+MemberColor                            : "`e[37m"
 NumberColor                            : "`e[97m"
 OperatorColor                          : "`e[90m"
 ParameterColor                         : "`e[90m"
-SelectionColor                         : "`e[30;107m"
+SelectionColor                         : "`e[30;47m"
 StringColor                            : "`e[36m"
 TypeColor                              : "`e[37m"
 VariableColor                          : "`e[92m"

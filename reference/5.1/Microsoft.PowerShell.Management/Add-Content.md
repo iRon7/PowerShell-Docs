@@ -2,7 +2,7 @@
 external help file: Microsoft.PowerShell.Commands.Management.dll-Help.xml
 Locale: en-US
 Module Name: Microsoft.PowerShell.Management
-ms.date: 12/12/2022
+ms.date: 10/31/2023
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.management/add-content?view=powershell-5.1&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: Add-Content
@@ -35,8 +35,8 @@ Add-Content [-Value] <Object[]> -LiteralPath <string[]> [-PassThru] [-Filter <st
 
 ## DESCRIPTION
 
-The `Add-Content` cmdlet appends content to a specified item or file. You can specify the content
-by typing the content in the command or by specifying an object that contains the content.
+The `Add-Content` cmdlet appends content to a specified item or file. Content can be passed in from
+the pipeline or specified by using the **Value** parameter.
 
 If you need to create files or directories for the following examples, see [New-Item](New-Item.md).
 
@@ -161,7 +161,7 @@ set to `False`.
 ### -Credential
 
 > [!NOTE]
-> This parameter is not supported by any providers installed with PowerShell.
+> This parameter isn't supported by any providers installed with PowerShell.
 > To impersonate another user, or elevate your credentials when running this cmdlet,
 > use [Invoke-Command](../Microsoft.PowerShell.Core/Invoke-Command.md).
 
@@ -240,7 +240,7 @@ installed PowerShell provider that supports the use of filters. You can find the
 **FileSystem** filter language in
 [about_Wildcards](../Microsoft.PowerShell.Core/About/about_Wildcards.md). Filters are more efficient
 than other parameters, because the provider applies them when the cmdlet gets the objects rather
-than having PowerShell filter the objects after they are retrieved.
+than having PowerShell filter the objects after they're retrieved.
 
 ```yaml
 Type: System.String
@@ -257,7 +257,7 @@ Accept wildcard characters: True
 ### -Force
 
 Overrides the read-only attribute, allowing you to add content to a read-only file. For example,
-**Force** overrides the read-only attribute but it does not change file permissions.
+**Force** overrides the read-only attribute but it doesn't change file permissions.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -293,7 +293,7 @@ Accept wildcard characters: True
 
 ### -LiteralPath
 
-Specifies a path to one or more locations. The value of **LiteralPath** is used exactly as it is
+Specifies a path to one or more locations. The value of **LiteralPath** is used exactly as it's
 typed. No characters are interpreted as wildcards. If the path includes escape characters, enclose
 it in single quotation marks. Single quotation marks tell PowerShell not to interpret any characters
 as escape sequences.
@@ -315,7 +315,7 @@ Accept wildcard characters: False
 
 ### -NoNewline
 
-Indicates that this cmdlet does not add a new line or carriage return to the content.
+Indicates that this cmdlet doesn't add a new line or carriage return to the content.
 
 The string representations of the input objects are concatenated to form the output. No spaces or
 newlines are inserted between the output strings. No newline is added after the last output string.
@@ -334,7 +334,7 @@ Accept wildcard characters: False
 
 ### -PassThru
 
-Returns an object representing the added content. By default, this cmdlet does not generate any
+Returns an object representing the added content. By default, this cmdlet doesn't generate any
 output.
 
 ```yaml
@@ -370,14 +370,14 @@ Accept wildcard characters: True
 
 ### -Stream
 
-Specifies an alternative data stream for content. If the stream does not exist, this cmdlet creates
-it. Wildcard characters are not supported.
+Specifies an alternative data stream for content. If the stream doesn't exist, this cmdlet creates
+it. Wildcard characters aren't supported.
 
 **Stream** is a dynamic parameter that the FileSystem provider adds to `Add-Content`. This
 parameter works only in file system drives.
 
 You can use the `Add-Content` cmdlet to change the content of any alternate data stream, such as
-`Zone.Identifier`. However, we do not recommend this as a way to eliminate security checks that
+`Zone.Identifier`. However, we don't recommend this as a way to eliminate security checks that
 block files that are downloaded from the Internet. If you verify that a downloaded file is safe, use
 the `Unblock-File` cmdlet.
 
@@ -418,7 +418,7 @@ Specifies the content to be added. Type a quoted string, such as **This data is 
 only**, or specify an object that contains content, such as the **DateTime** object that `Get-Date`
 generates.
 
-You cannot specify the contents of a file by typing its path, because the path is just a string.
+You can't specify the contents of a file by typing its path, because the path is just a string.
 You can use a `Get-Content` command to get the content and pass it to the **Value** parameter.
 
 ```yaml
@@ -451,7 +451,7 @@ Accept wildcard characters: False
 
 ### -WhatIf
 
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Shows what would happen if the cmdlet runs. The cmdlet isn't run.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -476,11 +476,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.Object
 
-You can pipe values to `Set-Content`.
+You can pipe values to `Add-Content`.
 
 ### System.Management.Automation.PSCredential
 
-You can pipe credentials to `Set-Content`.
+You can pipe credentials to `Add-Content`.
 
 ## OUTPUTS
 
@@ -499,7 +499,7 @@ Windows PowerShell includes the following aliases for `Add-Content`:
 
 - `ac`
 
-- When you pipe an object to `Add-Content`, the object is converted to a string before it is added
+- When you pipe an object to `Add-Content`, the object is converted to a string before it's added
   to the item. The object type determines the string format, but the format might be different than
   the default display of the object. To control the string format, use the formatting parameters of
   the sending cmdlet.

@@ -4,7 +4,7 @@ Locale: en-US
 ms.date: 12/05/2022
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_object_creation?view=powershell-7.2&WT.mc_id=ps-gethelp
 schema: 2.0.0
-title: about Object Creation
+title: about_Object_Creation
 ---
 # about_Object_Creation
 
@@ -216,7 +216,7 @@ members were added to the object. Even though **Hashtable** objects don't
 guarantee the order of the key-value pairs, casting a literal hashtable to
 `[pscustomobject]` maintains the order.
 
-The hashtable must be a literal. Tf you wrap the hashtable in parentheses or if
+The hashtable must be a literal. If you wrap the hashtable in parentheses or if
 you cast a variable containing a hashtable, there is no guarantee that the
 order is preserved.
 

@@ -4,7 +4,7 @@ Help Version: 7.2.0.0
 Locale: en-US
 Module Guid: 00000000-0000-0000-0000-000000000000
 Module Name: Microsoft.PowerShell.Core
-ms.date: 02/28/2019
+ms.date: 09/02/2024
 schema: 2.0.0
 title: Microsoft.PowerShell.Core
 ---
@@ -12,9 +12,10 @@ title: Microsoft.PowerShell.Core
 
 ## Description
 
-This section contains the help topics for the cmdlets that are installed with PowerShell
-Microsoft.PowerShell.Core module. The Core module contains cmdlets and providers that manage the
-basic features of PowerShell.
+The **Microsoft.PowerShell.Core** snap-in contains cmdlets and providers that manage the basic
+features of PowerShell. PowerShell loads **Microsoft.PowerShell.Core** snap-in automatically at
+startup. This is not a module. You can't import it using `Import-Module` or remove it using
+`Remove-Module`.
 
 ## Microsoft.PowerShell.Core Cmdlets
 
@@ -101,6 +102,9 @@ Gets the capabilities of a specific user on a constrained session configuration.
 
 ### [Get-PSSessionConfiguration](Get-PSSessionConfiguration.md)
 Gets the registered session configurations on the computer.
+
+### [Get-PSSubsystem](Get-PSSubsystem.md)
+Retrieves information about the subsystems registered in PowerShell. (Experimental Feature)
 
 ### [Import-Module](Import-Module.md)
 Adds modules to the current session.

@@ -1,10 +1,10 @@
 ---
 description: Describes how to use object properties in PowerShell.
 Locale: en-US
-ms.date: 07/18/2022
+ms.date: 08/21/2023
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_properties?view=powershell-7.2&WT.mc_id=ps-gethelp
 schema: 2.0.0
-title: about Properties
+title: about_Properties
 ---
 # about_Properties
 
@@ -182,7 +182,7 @@ You can use the static properties of .NET classes in PowerShell. Static
 properties are properties of class, unlike standard properties, which are
 properties of an object.
 
-To get the static properties of an class, use the **Static** parameter of the
+To get the static properties of a class, use the **Static** parameter of the
 `Get-Member` cmdlet. For example, the following command gets the static
 properties of the `System.DateTime` class.
 
@@ -252,14 +252,26 @@ the collection.
 176
 ```
 
-Starting in PowerShell 3.0, if you request the **Count** or **Length** property
-of zero objects or one object, PowerShell returns the correct value.
+Starting in PowerShell 3.0, you can get the **Count** or **Length** property of
+singleton objects that aren't collections.
 
 ```powershell
 (Get-Service Audiosrv).Count
 ```
 
 ```Output
+1
+```
+
+However, some objects have a **Length** property. For example, the **Length**
+of a string is the number of characters in the string. The **Count** property
+is the number of instances of the object.
+
+```powershell
+PS> $str = 'string'
+PS> $str.Length
+6
+PS> $str.Count
 1
 ```
 

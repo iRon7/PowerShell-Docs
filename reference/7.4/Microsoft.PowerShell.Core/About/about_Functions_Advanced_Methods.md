@@ -1,10 +1,10 @@
 ---
 description: Describes how functions that specify the `CmdletBinding` attribute can use the methods and properties that are available to compiled cmdlets.
 Locale: en-US
-ms.date: 01/20/2023
+ms.date: 05/20/2024
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_functions_advanced_methods?view=powershell-7.4&WT.mc_id=ps-gethelp
 schema: 2.0.0
-title: about Functions Advanced Methods
+title: about_Functions_Advanced_Methods
 ---
 
 # about_Functions_Advanced_Methods
@@ -20,7 +20,7 @@ Functions that specify the `CmdletBinding` attribute can access additional
 methods and properties through the `$PSCmdlet` variable. These methods include
 the following methods:
 
-- Input-processing methods that compiled cmdlets use to do their work.
+- The same input-processing methods available to all functions.
 - The `ShouldProcess` and `ShouldContinue` methods that are used to get user
   feedback before an action is performed.
 - The `ThrowTerminatingError` method for generating error records.
@@ -39,12 +39,13 @@ For more information about the `CmdletBinding` attribute, see
 
 The methods described in this section are referred to as the input processing
 methods. For functions, these three methods are represented by the `begin`,
-`process`, and `end` blocks of the function. You aren't required to use any of
-these blocks in your functions.
+`process`, and `end` blocks of the function. PowerShell 7.3 adds a `clean`
+block process method.
 
-> [!NOTE]
-> These blocks are also available to functions that don't use the
-> `CmdletBinding` attribute.
+You aren't required to use any of these blocks in your functions. If you don't
+use a named block, then PowerShell puts the code in the `end` block of the
+function. However, if you use any of these named blocks, or define a
+`dynamicparam` block, you must put all code in a named block.
 
 The following example shows the outline of a function that contains a `begin`
 block for one-time preprocessing, a `process` block for multiple record
@@ -62,11 +63,8 @@ Function Test-ScriptCmdlet
 ```
 
 > [!NOTE]
-> Using either a `begin` or `end` block requires that you define all three
-> blocks. When using any block, all PowerShell code must be inside one
-> of the blocks.
-
-PowerShell 7.3 adds a `clean` block process method.
+> These blocks apply to all functions, not just functions that use the
+> `CmdletBinding` attribute.
 
 ### `begin`
 
@@ -92,12 +90,41 @@ For more information, see [about_Automatic_Variables][15].
   that reaches the function.
 - If the pipeline input that reaches the function is empty, the `process` block
   **does not** execute.
-  - The `begin` and `end` blocks still execute.
+  - The `begin`, `end`, and `clean` blocks still execute.
 
 > [!IMPORTANT]
 > If a function parameter is set to accept pipeline input, and a `process`
 > block isn't defined, record-by-record processing will fail. In this case,
 > your function will only execute once, regardless of the input.
+
+When you create a function that accepts pipeline input and uses
+`CmdletBinding`, the `process` block should use the parameter variable you
+defined for pipeline input instead of `$_` or `$PSItem`. For example:
+
+```powershell
+function Get-SumOfNumbers {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory, Position=0, ValueFromPipeline)]
+        [int[]]$Numbers
+    )
+
+    begin { $retValue = 0 }
+
+    process {
+       foreach ($n in $Numbers) {
+           $retValue += $n
+       }
+    }
+
+    end { $retValue }
+}
+
+PS> Get-SumOfNumbers 1,2,3,4
+10
+PS> 1,2,3,4 | Get-SumOfNumbers
+10
+```
 
 ### `end`
 
@@ -118,6 +145,8 @@ script cmdlet. Resource cleanup is enforced for the following scenarios:
 1. when the pipeline is halted by `Select-Object -First`
 1. when the pipeline is being stopped by <kbd>Ctrl+c</kbd> or
    `StopProcessing()`
+
+The clean block discards any output that's written to the **Success** stream.
 
 > [!CAUTION]
 > Adding the `clean` block is a breaking change. Because `clean` is parsed as a

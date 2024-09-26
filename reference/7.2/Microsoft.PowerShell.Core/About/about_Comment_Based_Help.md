@@ -5,7 +5,7 @@ ms.date: 07/05/2022
 no-loc: [.SYNOPSIS, .DESCRIPTION, .PARAMETER, .EXAMPLE, .INPUTS, .OUTPUTS, .NOTES, .LINK, .COMPONENT, .ROLE, .FUNCTIONALITY, .FORWARDHELPTARGETNAME, .FORWARDHELPCATEGORY, .REMOTEHELPRUNSPACE, .EXTERNALHELP]
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_comment_based_help?view=powershell-7.2&WT.mc_id=ps-gethelp
 schema: 2.0.0
-title: about Comment Based Help
+title: about_Comment_Based_Help
 ---
 # about_Comment_Based_Help
 
@@ -869,4 +869,4 @@ Displays information about PowerShell cmdlets and concepts.
 - [about_Functions](about_Functions.md)
 - [about_Functions_Advanced_Parameters](about_Functions_Advanced_Parameters.md)
 - [about_Scripts](about_Scripts.md)
-- [How to Write Cmdlet Help](https://go.microsoft.com/fwlink/?LinkID=123415)
+- [Writing Comment-Based Help Topics](/powershell/scripting/developer/help/writing-comment-based-help-topics)

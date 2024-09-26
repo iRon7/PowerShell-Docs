@@ -2,7 +2,7 @@
 external help file: Microsoft.PowerShell.Commands.Utility.dll-Help.xml
 Locale: en-US
 Module Name: Microsoft.PowerShell.Utility
-ms.date: 12/12/2022
+ms.date: 03/15/2023
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.utility/export-csv?view=powershell-7.4&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: Export-Csv
@@ -21,8 +21,8 @@ file.
 ```
 Export-Csv -InputObject <PSObject> [[-Path] <String>] [-LiteralPath <String>] [-Force] [-NoClobber]
  [-Encoding <Encoding>] [-Append] [[-Delimiter] <Char>] [-IncludeTypeInformation]
- [-NoTypeInformation] [-QuoteFields <String[]>] [-UseQuotes <QuoteKind>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-NoTypeInformation] [-QuoteFields <String[]>] [-UseQuotes <QuoteKind>] [-NoHeader] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### UseCulture
@@ -30,7 +30,8 @@ Export-Csv -InputObject <PSObject> [[-Path] <String>] [-LiteralPath <String>] [-
 ```
 Export-Csv -InputObject <PSObject> [[-Path] <String>] [-LiteralPath <String>] [-Force] [-NoClobber]
  [-Encoding <Encoding>] [-Append] [-UseCulture] [-IncludeTypeInformation] [-NoTypeInformation]
- [-QuoteFields <String[]>] [-UseQuotes <QuoteKind>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-QuoteFields <String[]>] [-UseQuotes <QuoteKind>] [-NoHeader] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -446,7 +447,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -475,6 +476,7 @@ Specifies the encoding for the exported CSV file. The default value is `utf8NoBO
 The acceptable values for this parameter are as follows:
 
 - `ascii`: Uses the encoding for the ASCII (7-bit) character set.
+- `ansi`: Uses the encoding for the for the current culture's ANSI code page. This option was added
 - `bigendianunicode`: Encodes in UTF-16 format using the big-endian byte order.
 - `bigendianutf32`: Encodes in UTF-32 format using the big-endian byte order.
 - `oem`: Uses the default encoding for MS-DOS and console programs.
@@ -489,6 +491,9 @@ Beginning with PowerShell 6.2, the **Encoding** parameter also allows numeric ID
 pages (like `-Encoding 1251`) or string names of registered code pages (like
 `-Encoding "windows-1251"`). For more information, see the .NET documentation for
 [Encoding.CodePage](/dotnet/api/system.text.encoding.codepage?view=netcore-2.2).
+
+Starting with PowerShell 7.4, you can use the `Ansi` value for the **Encoding** parameter to pass
+the numeric ID for the current culture's ANSI code page without having to specify it manually.
 
 > [!NOTE]
 > **UTF-7*** is no longer recommended to use. As of PowerShell 7.1, a warning is written if you
@@ -522,15 +527,15 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -IncludeTypeInformation
 
-When this parameter is used the first line of the CSV output contains **#TYPE** followed by the
-fully qualified name of the object type. For example, **#TYPE System.Diagnostics.Process**.
+When this parameter is used the first line of the CSV output contains `#TYPE` followed by the
+fully qualified name of the object type. For example, `#TYPE System.Diagnostics.Process`.
 
 This parameter was introduced in PowerShell 6.0.
 
@@ -541,7 +546,7 @@ Aliases: ITI
 
 Required: False
 Position: Named
-Default value: #TYPE <Object>
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -594,14 +599,33 @@ Aliases: NoOverwrite
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -NoHeader
+
+When this parameter is used, the cmdlet doesn't write a header row containing the column names to
+the output.
+
+This parameter was added in PowerShell 7.4.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -NoTypeInformation
 
-Removes the **#TYPE** information header from the output. This parameter became the default in
+Removes the `#TYPE` information header from the output. This parameter became the default in
 PowerShell 6.0 and is included for backwards compatibility.
 
 ```yaml
@@ -611,7 +635,7 @@ Aliases: NTI
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -661,7 +685,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

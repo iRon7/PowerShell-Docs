@@ -1,10 +1,10 @@
 ---
 description: PowerShell logs internal operations from the engine, providers, and cmdlets to the Windows event log.
 Locale: en-US
-ms.date: 10/07/2022
+ms.date: 01/03/2024
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_logging_windows?view=powershell-7.4&WT.mc_id=ps-gethelp
 schema: 2.0.0
-title: about Logging Windows
+title: about_Logging_Windows
 ---
 
 # about_Logging_Windows
@@ -18,12 +18,41 @@ the Windows event log.
 PowerShell logs details about PowerShell operations, such as starting and
 stopping the engine and providers, and executing PowerShell commands.
 
-> [!NOTE]
-> Windows PowerShell versions 3.0, 4.0, 5.0, and 5.1 include **EventLog**
-> cmdlets for the Windows event logs. In those versions, to display the list of
-> **EventLog** cmdlets type: `Get-Command -Noun EventLog`. For more
-> information, see the cmdlet documentation and about_EventLogs for your
-> version of Windows PowerShell.
+For information about logging in Windows PowerShell 5.1, see
+[about_Logging][02].
+
+PowerShell supports configuring two categories of logging:
+
+- Module logging - Record the pipeline execution events for members of
+  specified modules. Module logging must be enabled for both the session and
+  specific modules. For more information about configuring this logging, see
+  [about_PowerShell_Config][05].
+
+  If module logging is enabled through configuration, you can enable and
+  disable logging for specific modules in a session by setting the value of the
+  **LogPipelineExecutionDetails** property of the module.
+
+  For example, to enable module logging for the **PSReadLine** module:
+
+  ```powershell
+  $psrl = Get-Module PSReadLine
+  $psrl.LogPipelineExecutionDetails = $true
+  Get-Module PSReadline | Select-Object Name, LogPipelineExecutionDetails
+  ```
+
+  ```Output
+  Name       LogPipelineExecutionDetails
+  ----       ---------------------------
+  PSReadLine                        True
+  ```
+
+- Script block logging - Record the processing of commands, script blocks,
+  functions, and scripts whether invoked interactively, or through automation.
+
+  When you enable Script Block Logging, PowerShell records the content of all
+  script blocks that it processes. Once enabled, any new PowerShell session
+  logs this information. For more information, see
+  [Enabling Script Block Logging][03].
 
 ## Registering the PowerShell event provider on Windows
 
@@ -38,12 +67,12 @@ $PSHOME\RegisterManifest.ps1
 ## Viewing the PowerShell event log entries on Windows
 
 PowerShell logs can be viewed using the Windows Event Viewer. The event log is
-located in the Application and Services Logs group and is named
-`PowerShellCore`. The associated ETW provider `GUID` is
+located in the **Application and Services Logs** group and is named
+**PowerShellCore**. The associated ETW provider GUID is
 `{f90714a8-5509-434a-bf6d-b1624c8a19a2}`.
 
 When Script Block Logging is enabled, PowerShell logs the following events to
-the `PowerShellCore/Operational` log:
+the **PowerShellCore/Operational** log:
 
 |  Field  |       Value       |
 | ------- | ----------------- |
@@ -84,28 +113,34 @@ Script Block Logging can be enabled via Group Policy or a registry setting.
 
 ### Using Group Policy
 
-To enable automatic transcription, enable the `Turn on PowerShell Script Block
-Logging` feature in Group Policy through `Administrative Templates -> Windows
-Components -> Windows PowerShell`.
+To enable automatic transcription, enable the **Turn on PowerShell Script Block
+Logging** feature in Group Policy through **Administrative Templates** ->
+**PowerShell Core**.
 
 ### Using the Registry
 
 Run the following function:
 
 ```powershell
-function Enable-PSScriptBlockLogging
-{
-    $basePath = 'HKLM:\Software\Policies\Microsoft\Windows' +
-      '\PowerShell\ScriptBlockLogging'
+function Enable-PSScriptBlockLogging {
+    $basePath = @(
+        'HKLM:\Software\Policies\Microsoft'
+        'PowerShellCore\ScriptBlockLogging'
+    ) -join '\'
 
-    if(-not (Test-Path $basePath))
-    {
+    if (-not (Test-Path $basePath)) {
         $null = New-Item $basePath -Force
     }
 
     Set-ItemProperty $basePath -Name EnableScriptBlockLogging -Value "1"
 }
 ```
+
+### Using the PowerShell configuration file
+
+You can set the `ScriptBlockLogging` option in the `powershell.config.json`
+file that controls how PowerShell behaves. For more information, see
+[about_PowerSHell_Config][06].
 
 ## Protected Event Logging
 
@@ -127,13 +162,13 @@ content and decrypt content are kept separate.
 The public key can be shared widely and isn't sensitive data. Any content
 encrypted with this public key can only be decrypted by the private key. For
 more information about Public Key Cryptography, see
-[Wikipedia - Public Key Cryptography][01].
+[Wikipedia - Public Key Cryptography][08].
 
 To enable a Protected Event Logging policy, deploy a public key to all machines
 that have event log data to protect. The corresponding private key is used to
 post-process the event logs at a more secure location such as a central event
-log collector, or [SIEM][02] aggregator. You can set up SIEM in Azure. For more
-information, see [Generic SIEM integration][03].
+log collector, or [SIEM][09] aggregator. You can set up SIEM in Azure. For more
+information, see [Generic SIEM integration][01].
 
 ### Enabling Protected Event Logging via Group Policy
 
@@ -153,8 +188,8 @@ can provide in one of several forms:
   certificate store (can be deployed by PKI infrastructure).
 
 The resulting certificate must have `Document Encryption` as an enhanced key
-usage (`1.3.6.1.4.1.311.80.1`), and either `Data Encipherment` or `Key
-Encipherment` key usages enabled.
+usage (`1.3.6.1.4.1.311.80.1`), and either `Data Encipherment` or
+`Key Encipherment` key usages enabled.
 
 > [!WARNING]
 > The private key shouldn't be deployed to the machines logging events. It
@@ -162,24 +197,28 @@ Encipherment` key usages enabled.
 
 ### Decrypting Protected Event Logging messages
 
-The following script will retrieve and decrypt, assuming that you have the
+The following script retrieves and decrypts events, assuming that you have the
 private key:
 
 ```powershell
 Get-WinEvent Microsoft-Windows-PowerShell/Operational |
-  Where-Object Id -eq 4104 | Unprotect-CmsMessage
+    Where-Object Id -eq 4104 |
+    Unprotect-CmsMessage
 ```
 
 ## See also
 
 - [about_Logging_Non-Windows][04]
-- [PowerShell the Blue Team][05]
-- [Generic SIEM integration][03]
+- [PowerShell the Blue Team][07]
+- [Generic SIEM integration][01]
 
-<!-- added link references -->
-[01]: https://en.wikipedia.org/wiki/Public-key_cryptography
-[02]: https://wikipedia.org/wiki/Security_information_and_event_management
-[03]: /cloud-app-security/siem
+<!-- link references -->
+[01]: /cloud-app-security/siem
+[02]: /powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1&preserve-view=true
+[03]: #enabling-script-block-logging
 [04]: about_Logging_Non-Windows.md
-[05]: https://devblogs.microsoft.com/powershell/powershell-the-blue-team/
-[06]: /cloud-app-security/siem
+[05]: about_PowerShell_Config.md#modulelogging
+[06]: about_PowerShell_Config.md#scriptblocklogging
+[07]: https://devblogs.microsoft.com/powershell/powershell-the-blue-team/
+[08]: https://en.wikipedia.org/wiki/Public-key_cryptography
+[09]: https://wikipedia.org/wiki/Security_information_and_event_management

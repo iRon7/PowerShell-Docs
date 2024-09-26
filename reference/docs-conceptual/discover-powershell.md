@@ -1,7 +1,7 @@
 ---
 description: Learn what PowerShell is and some essential commands used to discover more about PowerShell.
 ms.date: 01/31/2023
-ms.reviewer: sewhee
+ms.topic: overview
 title: Discover PowerShell
 ---
 
@@ -49,7 +49,7 @@ When you first pick up PowerShell, it might feel intimidating as there seems to 
 PowerShell is designed to help you learn a little at a time, as you need it.
 
 PowerShell includes cmdlets that help you discover PowerShell. Using these three cmdlets, you can
-discover what commands available, what they do, and what types they operate on.
+discover what commands are available, what they do, and what types they operate on.
 
 - `Get-Verb`. Running this command returns a list of verbs that most commands adhere to. The
   response includes a description of what these verbs do. Since most commands follow this naming
@@ -144,7 +144,7 @@ rightmost part of a command is the noun part. A noun can be anything.
    This example lists all commands that use the verb `Get`.
 
 - **Filter on noun**. In the command `Get-Process`, the noun part is `Process`. To filter on the
-  noun, use the **Noun** parameter. The following example returns all cmdlets the have nouns
+  noun, use the **Noun** parameter. The following example returns all cmdlets that have nouns
   starting with the letter `U`.
 
    ```powershell
@@ -189,9 +189,9 @@ You can also use other cmdlets to filter results.
 
    For more information, see [Select-Object][03].
 
-- `Where-Object`. This cmdlet lets you filter the objects returned based on the values of properties. The
-  command takes an expression that can test the value of a property. The following example returns
-  all processes where the `ProcessName` starts with `p`.
+- `Where-Object`. This cmdlet lets you filter the objects returned based on the values of
+  properties. The command takes an expression that can test the value of a property. The following
+  example returns all processes where the `ProcessName` starts with `p`.
 
   ```powershell
   Get-Process | Where-Object {$_.ProcessName -like "p*"}
@@ -206,8 +206,8 @@ You can also use other cmdlets to filter results.
 ## Explore objects with Get-Member
 
 Once you've been able to locate the cmdlet you want, you want to know more about what output it
-produces. the output. The `Get-Member` cmdlet displays the type, properties, and methods of an
-object. Pipe the output you want to inspect to `Get-Member`.
+produces. The `Get-Member` cmdlet displays the type, properties, and methods of an object. Pipe the
+output you want to inspect to `Get-Member`.
 
 ```powershell
 Get-Process | Get-Member
@@ -234,7 +234,7 @@ Get-Process | Get-Member -MemberType Method
 
 By default PowerShell only displays a few properties. The previous example displayed the `Name`,
 `MemberType` and `Definition` members. You can use `Select-Object` to specify properties you want to
-see. You For example, you want to display only the `Name` and `Definition` properties:
+see. For example, you want to display only the `Name` and `Definition` properties:
 
 ```powershell
 Get-Process | Get-Member | Select-Object Name, Definition

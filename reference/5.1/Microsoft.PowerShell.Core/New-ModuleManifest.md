@@ -57,7 +57,7 @@ aren't specified in the command, in addition to required parameter values. Begin
 
 If you are planning to publish your module in the PowerShell Gallery, the manifest must contain
 values for certain properties. For more information, see
-[Required metadata for items published to the PowerShell Gallery](/powershell/scripting/gallery/how-to/publishing-packages/publishing-a-package#required-metadata-for-items-published-to-the-powershell-gallery)
+[Required metadata for items published to the PowerShell Gallery](/powershell/gallery/how-to/publishing-packages/publishing-a-package#required-metadata-for-items-published-to-the-powershell-gallery)
 in the Gallery documentation.
 
 ## EXAMPLES
@@ -422,7 +422,7 @@ Accept wildcard characters: False
 ### -CompatiblePSEditions
 
 Specifies the module's compatible PSEditions. For information about PSEdition, see
-[Modules with compatible PowerShell Editions](/powershell/scripting/gallery/concepts/module-psedition-support).
+[Modules with compatible PowerShell Editions](/powershell/gallery/concepts/module-psedition-support).
 
 ```yaml
 Type: System.String[]
@@ -579,7 +579,7 @@ Specifies the functions that the module exports. Wildcards are permitted.
 You can use this parameter to restrict the functions that are exported by the module. It can remove
 functions from the list of exported aliases, but it can't add functions to the list.
 
-If you omit this parameter, `New-ModuleManifest` creates an **FunctionsToExport** key with a value
+If you omit this parameter, `New-ModuleManifest` creates a **FunctionsToExport** key with a value
 of `*` (all), meaning that all functions defined in the module are exported by the manifest.
 
 ```yaml

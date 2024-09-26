@@ -2,7 +2,7 @@
 external help file: Microsoft.PowerShell.Commands.Utility.dll-Help.xml
 Locale: en-US
 Module Name: Microsoft.PowerShell.Utility
-ms.date: 12/12/2022
+ms.date: 06/19/2024
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.utility/select-object?view=powershell-7.2&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: Select-Object
@@ -18,31 +18,28 @@ Selects objects or object properties.
 ### DefaultParameter (Default)
 
 ```
-Select-Object [-InputObject <PSObject>] [[-Property] <Object[]>]
- [-ExcludeProperty <String[]>] [-ExpandProperty <String>] [-Unique] [-Last <Int32>
- [-First <Int32>] [-Skip <Int32>] [-Wait] [<CommonParameters>]
+Select-Object [[-Property] <Object[]>] [-InputObject <psobject>] [-ExcludeProperty <string[]>]
+ [-ExpandProperty <string>] [-Unique] [-Last <int>] [-First <int>] [-Skip <int>] [-Wait]
+ [<CommonParameters>]
 ```
 
 ### SkipLastParameter
 
 ```
-Select-Object [-InputObject <PSObject>] [[-Property] <Object[]>]
- [-ExcludeProperty <String[]>] [-ExpandProperty <String>] [-Unique] [-SkipLast <Int32>]
- [<CommonParameters>]
+Select-Object [[-Property] <Object[]>] [-InputObject <psobject>] [-ExcludeProperty <string[]>]
+ [-ExpandProperty <string>] [-Unique] [-SkipLast <int>] [<CommonParameters>]
 ```
 
 ### IndexParameter
 
 ```
-Select-Object [-InputObject <PSObject>] [-Unique] [-Wait] [-Index <Int32[]>]
- [<CommonParameters>]
+Select-Object [-InputObject <psobject>] [-Unique] [-Wait] [-Index <int[]>] [<CommonParameters>]
 ```
 
 ### SkipIndexParameter
 
 ```
-Select-Object [-InputObject <PSObject>] [-Unique] [-SkipIndex <Int32[]>]
- [<CommonParameters>]
+Select-Object [-InputObject <psobject>] [-Unique] [-SkipIndex <int[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -58,11 +55,9 @@ properties, `Select-Object` returns new objects that have only the specified pro
 Beginning in Windows PowerShell 3.0, `Select-Object` includes an optimization feature that prevents
 commands from creating and processing objects that aren't used.
 
-When you include a `Select-Object` command with the **First** or **Index** parameters in a command
-pipeline, PowerShell stops the command that generates the objects as soon as the selected number of
-objects is generated, even when the command that generates the objects appears before the
-`Select-Object` command in the pipeline. To turn off this optimizing behavior, use the **Wait**
-parameter.
+When you use `Select-Object` with the **First** or **Index** parameters in a command pipeline,
+PowerShell stops the command that generates the objects as soon as the selected number of objects is
+reached. To turn off this optimizing behavior, use the **Wait** parameter.
 
 ## EXAMPLES
 
@@ -174,14 +169,14 @@ applied to `"a","a"` and returns `a` as the unique value.
 
 This example gets the first (newest) and last (oldest) events in the Windows PowerShell event log.
 
-`Get-EventLog` gets all events in the Windows PowerShell log and saves them in the `$a` variable.
+`Get-WinEvent` gets all events in the Windows PowerShell log and saves them in the `$a` variable.
 Then, `$a` is piped to the `Select-Object` cmdlet. The `Select-Object` command uses the **Index**
 parameter to select events from the array of events in the `$a` variable. The index of the first
 event is 0. The index of the last event is the number of items in `$a` minus 1.
 
 ```powershell
-$a = Get-EventLog -LogName "Windows PowerShell"
-$a | Select-Object -Index 0, ($A.count - 1)
+$a = Get-WinEvent -LogName "Windows PowerShell"
+$a | Select-Object -Index 0, ($a.count - 1)
 ```
 
 ### Example 7: Select all but the first object
@@ -355,6 +350,81 @@ name weight
 a         7
 ```
 
+### Example 13: ExpandProperty alters the original object
+
+This example demonstrates the side-effect of using the **ExpandProperty** parameter. When you use
+**ExpandProperty**, `Select-Object` adds the selected properties to the original object as
+**NoteProperty** members.
+
+```powershell
+PS> $object = [PSCustomObject]@{
+    name = 'USA'
+    children = [PSCustomObject]@{
+        name = 'Southwest'
+    }
+}
+PS> $object
+
+name children
+---- --------
+USA  @{name=Southwest}
+
+# Use the ExpandProperty parameter to expand the children property
+PS> $object | Select-Object @{n="country"; e={$_.name}} -ExpandProperty children
+
+name      country
+----      -------
+Southwest USA
+
+# The original object has been altered
+PS> $object
+
+name children
+---- --------
+USA  @{name=Southwest; country=USA}
+```
+
+As you can see, the **country** property was added to the **children** object after using the
+**ExpandProperty** parameter.
+
+### Example 14: Create a new object with expanded properties without altering the input object
+
+You can avoid the side-effect of using the **ExpandProperty** parameter by creating a new object and
+copying the properties from the input object.
+
+```powershell
+PS> $object = [PSCustomObject]@{
+    name = 'USA'
+    children = [PSCustomObject]@{
+        name = 'Southwest'
+    }
+}
+PS> $object
+
+name children
+---- --------
+USA  @{name=Southwest}
+
+# Create a new object with selected properties
+PS> $newobject = [PSCustomObject]@{
+    country = $object.name
+    children = $object.children
+}
+
+PS> $newobject
+
+country children
+------- --------
+USA     @{name=Southwest}
+
+# $object remains unchanged
+PS> $object
+
+name children
+---- --------
+USA  @{name=Southwest}
+```
+
 ## PARAMETERS
 
 ### -ExcludeProperty
@@ -379,7 +449,8 @@ Accept wildcard characters: True
 ### -ExpandProperty
 
 Specifies a property to select, and indicates that an attempt should be made to expand that
-property.
+property. If the input object pipeline doesn't have the property named, `Select-Object` returns an
+error.
 
 - If the specified property is an array, each value of the array is included in the output.
 - If the specified property is an object, the objects properties are expanded for every
@@ -387,13 +458,17 @@ property.
 
 In either case, the output objects' **Type** matches the expanded property's **Type**.
 
+> [!NOTE]
+> There is a side-effect when using **ExpandProperty**. The `Select-Object` adds the selected
+> properties to the original object as **NoteProperty** members.
+
 If the **Property** parameter is specified, `Select-Object` attempts to add each selected property
 as a **NoteProperty** to every outputted object.
 
 > [!WARNING]
 > If you receive an error that a property can't be processed because a property with that name
 > already exists, consider the following. Note that when using **ExpandProperty**, `Select-Object`
-> can not replace an existing property. This means:
+> can't replace an existing property. This means:
 >
 > - If the expanded object has a property of the same name, the command returns an error.
 > - If the _Selected_ object has a property of the same name as an _Expanded_ object's property, the
@@ -485,7 +560,8 @@ Accept wildcard characters: False
 ### -Property
 
 Specifies the properties to select. These properties are added as **NoteProperty** members to the
-output objects. Wildcards are permitted.
+output objects. Wildcards are permitted. If the input object doesn't have the property named, the
+value of the new **NoteProperty** is set to `$null`.
 
 The value of the **Property** parameter can be a new calculated property. To create a calculated,
 property, use a hash table.
@@ -512,9 +588,9 @@ Accept wildcard characters: True
 
 ### -Skip
 
-Skips (doesn't select) the specified number of items. By default, the **Skip** parameter counts
-from the beginning of the array or list of objects, but if the command uses the **Last** parameter,
-it counts from the end of the list or array.
+Skips (doesn't select) the specified number of items. By default, the **Skip** parameter counts from
+the beginning of the collection of objects. If the command uses the **Last** parameter, it counts
+from the end of the collection.
 
 Unlike the **Index** parameter, which starts counting at 0, the **Skip** parameter begins at 1.
 
@@ -531,6 +607,12 @@ Accept wildcard characters: False
 ```
 
 ### -SkipIndex
+
+Skips (doesn't select) the objects from an array based on their index values. Enter the indexes in
+a comma-separated list. Indexes in an array begin with 0, where 0 represents the first value and
+(n-1) represents the last value.
+
+This parameter was introduced in Windows PowerShell 6.0.
 
 ```yaml
 Type: System.Int32[]

@@ -1,10 +1,10 @@
 ---
 description: Describes the operators that compare values in PowerShell.
 Locale: en-US
-ms.date: 01/20/2023
+ms.date: 06/06/2024
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_comparison_operators?view=powershell-7.4&WT.mc_id=ps-gethelp
 schema: 2.0.0
-title: about Comparison Operators
+title: about_Comparison_Operators
 ---
 # about_Comparison_Operators
 
@@ -60,9 +60,18 @@ case-sensitive operator. To make a comparison operator case-sensitive, add a
 To make the case-insensitivity explicit, add an `i` after `-`. For example,
 `-ieq` is the explicitly case-insensitive version of `-eq`.
 
-When the input of an operator is a scalar value, the operator returns a
-**Boolean** value. When the input is a collection, the operator returns the
-elements of the collection that match the right-hand value of the expression.
+String comparisons use the [InvariantCulture][01] for both case-sensitive and
+case-insensitive comparisons. The comparisons are between unicode code points
+and don't use culture-specific collation ordering. The results are the same
+regardless of the current culture.
+
+When the left-hand value in the comparison expression is a [scalar][15] value,
+the operator returns a **Boolean** value. When the left-hand value in the
+expression is a collection, the operator returns the elements of the collection
+that match the right-hand value of the expression. Right-hand values are always
+treated as singleton instances, even when they're collections. The comparison
+operators can't effectively compare collections to collections.
+
 If there are no matches in the collection, comparison operators return an empty
 array. For example:
 
@@ -89,9 +98,9 @@ There are a few exceptions:
 ### -eq and -ne
 
 When the left-hand side is scalar, `-eq` returns **True** if the right-hand
-side is an exact match, otherwise, `-eq` returns **False**. `-ne` does the
-opposite; it returns **False** when both sides match; otherwise, `-ne` returns
-**True**.
+side is equivalent, otherwise, `-eq` returns **False**. `-ne` does the
+opposite; it returns **False** when both sides are equivalent; otherwise, `-ne`
+returns **True**.
 
 Example:
 
@@ -128,7 +137,7 @@ zzz
 ```
 
 The equality operator can compare objects of different types. It's important to
-understand that the value is on the right-hand side of the comparison can be
+understand that the value on the right-hand side of the comparison can be
 converted to the type of the left-hand side value for comparison.
 
 For example, the string `'1.0'` is converted to an integer to be compared to
@@ -351,9 +360,14 @@ The syntax is:
 ```
 
 When the input of these operators is a scalar value, they return a **Boolean**
-value. When the input is a collection of values, the operators return any
-matching members. If there are no matches in a collection, the operators return
-an empty array.
+value.
+
+When the input is a collection of values, each item in the collection is
+converted to a string for comparison. The `-match` and `-notmatch` operators
+return any matching and non-matching members respectively. However, the `-like`
+and `-notlike` operators return the members as strings. The string returned for
+a member of the collection by `-like` and `-notlike` is the string the operator
+used for the comparison and is obtained by casting the member to a string.
 
 ### -like and -notlike
 
@@ -639,22 +653,18 @@ comparing as soon as they detect the first match, whereas the equality
 operators evaluate all input members. In a very large collection, these
 operators return quicker than the equality operators.
 
-Syntax:
-
-```
-<Collection> -contains <Test-object>
-<Collection> -notcontains <Test-object>
-<Test-object> -in <Collection>
-<Test-object> -notin <Collection>
-```
-
 ### -contains and -notcontains
 
+Syntax:
+
+```Syntax
+<Collection> -contains <scalar-object>
+<Collection> -notcontains <scalar-object>
+```
+
 These operators tell whether a set includes a certain element. `-contains`
-returns **True** when the right-hand side (test object) matches one of the
-elements in the set. `-notcontains` returns False instead. When the test object
-is a collection, these operators use reference equality, i.e. they check
-whether one of the set's elements is the same instance of the test object.
+returns **True** when the right-hand side (scalar-object) matches one of the
+elements in the set. `-notcontains` returns False instead.
 
 Examples:
 
@@ -676,20 +686,35 @@ $thisComputer  = "ContosoDC2"
 
 $DomainServers -contains $thisComputer
 # Output: True
+```
 
+When the right-hand side operand is a collection, these operators convert the
+value to its string representation before comparing it to the left-hand side
+collection.
+
+```powershell
 $a = "abc", "def"
 "abc", "def", "ghi" -contains $a # Output: False
+
+# The following statements are equivalent
 $a, "ghi" -contains $a           # Output: True
+"$a", "ghi" -contains $a         # Output: True
+"abc def", "ghi" -contains $a    # Output: True
 ```
 
 ### -in and -notin
 
+Syntax:
+
+```Syntax
+<scalar-object> -in <Collection>
+<scalar-object> -notin <Collection>
+```
+
 The `-in` and `-notin` operators were introduced in PowerShell 3 as the
 syntactic reverse of the of `-contains` and `-notcontains` operators. `-in`
-returns **True** when the left-hand side `<test-object>` matches one of the
-elements in the set. `-notin` returns **False** instead. When the test object
-is a set, these operators use reference equality to check whether one of the
-set's elements is the same instance of the test object.
+returns **True** when the left-hand side `<scalar-object>` matches one of the
+elements in the collection. `-notin` returns **False** instead.
 
 The following examples do the same thing that the examples for `-contains` and
 `-notcontains` do, but they're written with `-in` and `-notin` instead.
@@ -712,10 +737,20 @@ $thisComputer  = "ContosoDC2"
 
 $thisComputer -in $DomainServers
 # Output: True
+```
 
+When the left-hand side operand is a collection, these operators convert the
+value to its string representation before comparing it to the right-hand side
+collection.
+
+```powershell
 $a = "abc", "def"
 $a -in "abc", "def", "ghi" # Output: False
+
+# The following statements are equivalent
 $a -in $a, "ghi"           # Output: True
+$a -in "$a", "ghi"         # Output: True
+$a -in "abc def", "ghi"    # Output: True
 ```
 
 ## Type comparison
@@ -752,6 +787,7 @@ $a -isnot $b.GetType() # Output: True
 - [Where-Object][13]
 
 <!-- link references -->
+[01]: /dotnet/api/system.globalization.cultureinfo.invariantculture
 [02]: /dotnet/api/system.icomparable
 [03]: /dotnet/api/system.iequatable-1
 [04]: /dotnet/api/system.text.regularexpressions.match
@@ -765,3 +801,4 @@ $a -isnot $b.GetType() # Output: True
 [12]: xref:Microsoft.PowerShell.Core.ForEach-Object
 [13]: xref:Microsoft.PowerShell.Core.Where-Object
 [14]: xref:Microsoft.PowerShell.Utility.Compare-Object
+[15]: /powershell/scripting/learn/glossary#scalar-value

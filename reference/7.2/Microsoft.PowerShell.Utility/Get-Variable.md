@@ -3,7 +3,7 @@ external help file: Microsoft.PowerShell.Commands.Utility.dll-Help.xml
 Locale: en-US
 Module Name: Microsoft.PowerShell.Utility
 ms.date: 12/12/2022
-online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.utility/get-variable?view=powershell-7.3&WT.mc_id=ps-gethelp
+online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.utility/get-variable?view=powershell-7.2&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: Get-Variable
 ---
@@ -185,7 +185,7 @@ The object type depends on the variable.
 When you specify the **ValueOnly** parameter and the specified variable's value is a collection,
 this cmdlet returns a `[System.Object[]]`. This behavior prevents normal pipeline operation from
 processing the variable's values one at a time. A workaround to force collection enumeration is to
-enclose the `Get-Variable` command in parenthesis.
+enclose the `Get-Variable` command in parentheses.
 
 ## NOTES
 

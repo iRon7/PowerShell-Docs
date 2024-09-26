@@ -178,13 +178,17 @@ This cmdlet returns no output.
 
 ## NOTES
 
-- The **PrincipalSource** property is a property on **LocalUser**, **LocalGroup**, and
-  **LocalPrincipal** objects that describes the source of the object. The possible sources are as
-  follows:
+Windows PowerShell includes the following aliases for `Rename-LocalUser`:
+
+- `rnlu`
+
+The **PrincipalSource** property is a property on **LocalUser**, **LocalGroup**, and
+**LocalPrincipal** objects that describes the source of the object. The possible sources are as
+follows:
 
 - Local
 - Active Directory
-- Azure Active Directory group
+- Microsoft Entra group
 - Microsoft Account
 
 **PrincipalSource** is supported only by Windows 10, Windows Server 2016, and later versions of the

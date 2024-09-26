@@ -2,7 +2,7 @@
 external help file: Microsoft.PowerShell.Commands.Management.dll-Help.xml
 Locale: en-US
 Module Name: Microsoft.PowerShell.Management
-ms.date: 12/12/2022
+ms.date: 11/01/2023
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.management/start-process?view=powershell-7.4&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: Start-Process
@@ -15,22 +15,20 @@ Starts one or more processes on the local computer.
 
 ## SYNTAX
 
-### Default (Default)
-
 ```
-Start-Process [-FilePath] <String> [[-ArgumentList] <String[]>] [-Credential <PSCredential>]
- [-WorkingDirectory <String>] [-LoadUserProfile] [-NoNewWindow] [-PassThru]
- [-RedirectStandardError <String>] [-RedirectStandardInput <String>]
- [-RedirectStandardOutput <String>] [-WindowStyle <ProcessWindowStyle>] [-Wait] [-UseNewEnvironment]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Start-Process [-FilePath] <string> [[-ArgumentList] <string[]>] [-Credential <pscredential>]
+ [-WorkingDirectory <string>] [-LoadUserProfile] [-NoNewWindow] [-PassThru]
+ [-RedirectStandardError <string>] [-RedirectStandardInput <string>]
+ [-RedirectStandardOutput <string>] [-WindowStyle <ProcessWindowStyle>] [-Wait]
+ [-UseNewEnvironment] [-Environment <hashtable>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### UseShellExecute
 
 ```
-Start-Process [-FilePath] <String> [[-ArgumentList] <String[]>] [-WorkingDirectory <String>]
- [-PassThru] [-Verb <String>] [-WindowStyle <ProcessWindowStyle>] [-Wait] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Start-Process [-FilePath] <string> [[-ArgumentList] <string[]>] [-WorkingDirectory <string>]
+ [-PassThru] [-Verb <string>] [-WindowStyle <ProcessWindowStyle>] [-Wait]
+ [-Environment <hashtable>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -136,27 +134,7 @@ Start-Process -FilePath "$env:comspec" -ArgumentList "/c dir `"%SystemDrive%\Pro
 Start-Process -FilePath "$env:comspec" -ArgumentList "/c","dir","`"%SystemDrive%\Program Files`""
 ```
 
-### Example 8: Run a command as an Administrator using alternate credentials
-
-On Windows, you can run `Start-Process -Verb RunAs` to start a process with elevated permissions.
-This elevates the current user's context. The **Credential** parameter allows you to specify an
-alternate username and password, allowing you to start a process in a different user content.
-However, the **Credential** and **Verb** parameters can't be used together.
-
-To start a process with elevated rights, using alternate credentials, you must first start
-PowerShell using the alternate credentials, then use `Start-Process` to start the process with
-elevated rights.
-
-```powershell
-$cred = Get-Credential
-$args = '-noprofile -command "Start-Process cmd.exe -Verb RunAs -args /k"'
-Start-Process pwsh.exe -Credential $cred -WindowStyle Hidden -ArgumentList $args
-```
-
-The example starts `cmd.exe` with elevated permissions from a PowerShell session that is running
-under alternate credentials.
-
-### Example 9: Create a detached process on Linux
+### Example 8: Create a detached process on Linux
 
 On Windows, `Start-Process` creates an independent process that remains running independently of the
 launching shell. On non-Windows platforms, the newly started process is attached to the shell that
@@ -175,6 +153,35 @@ Start-Process nohup 'pwsh -noprofile -c "1..120 | % { Write-Host . -NoNewline; s
 In this example, `Start-Process` is running the Linux `nohup` command, which launches `pwsh` as a
 detached process. For more information, see the [nohup](https://wikipedia.org/wiki/Nohup) article on
 Wikipedia.
+
+### Example 9: Overriding an environment variable for a process
+
+By default, when you use `Start-Process`, the new process is created with the same environment
+variables as the current session. You can use the **Environment** parameter to override the values
+of those variables.
+
+In this example, the environment variable `FOO` is added to the session with `foo` as the value.
+
+The example runs `Start-Process` three times, returning the value of `FOO` each time. The first
+command doesn't override the environment variable. In the second command, `FOO` is set to `bar`. In
+the third command, `FOO` is set to `$null`, which removes it.
+
+```powershell
+$env:FOO = 'foo'
+Start-Process pwsh -NoNewWindow -ArgumentList '-c', '$env:FOO'
+Start-Process pwsh -NoNewWindow -ArgumentList '-c', '$env:FOO' -Environment @{
+    FOO  = 'bar'
+}
+Start-Process pwsh -NoNewWindow -ArgumentList '-c', '$env:FOO' -Environment @{
+    FOO  = $null
+}
+```
+
+```Output
+foo
+bar
+
+```
 
 ## PARAMETERS
 
@@ -229,6 +236,31 @@ Aliases: RunAs
 Required: False
 Position: Named
 Default value: Current user
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Environment
+
+Specifies one or more environment variables to override for the process as a hash table. Specify
+the name of an environment variable as a key in the hash table and the desired value. To unset an
+environment variable, specify its value as `$null`.
+
+The specified variables are replaced in the process. When you specify the `PATH` environment
+variable it's replaced with the value of `$PSHOME` followed by the specified value from this
+parameter. On Windows, the command appends the values for `PATH` in the Machine and User scopes
+after the new value.
+
+This parameter was added in PowerShell 7.4.
+
+```yaml
+Type: System.Collections.Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -557,7 +589,7 @@ from any command-line shell, like PowerShell. Usually you run the command exactl
 only be used when you need to control how the command is executed.
 
 `Start-Process` is useful for running GUI programs on non-Windows platforms. For example, run
-`Start-Proces gedit` to launch the graphical text editor common the GNOME Desktop environments.
+`Start-Process gedit` to launch the graphical text editor common the GNOME Desktop environments.
 
 By default, `Start-Process` launches a process _asynchronously_. Control is instantly returned to
 PowerShell even if the new process is still running.

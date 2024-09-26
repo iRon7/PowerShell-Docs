@@ -1,10 +1,10 @@
 ---
 description: Variables that customize the behavior of PowerShell.
 Locale: en-US
-ms.date: 01/30/2023
+ms.date: 04/06/2024
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-7.2&WT.mc_id=ps-gethelp
 schema: 2.0.0
-title: about Preference Variables
+title: about_Preference_Variables
 ---
 # about_Preference_Variables
 
@@ -19,8 +19,8 @@ behavior. These preference variables work like the options in GUI-based
 systems.
 
 The preference variables affect the PowerShell operating environment and all
-commands run in the environment. In many cases, the cmdlets have parameters
-that you can use to override the preference behavior for a specific command.
+commands run in the environment. Some cmdlets have parameters that allow you to
+override the preference behavior for a specific command.
 
 The following table lists the preference variables and their default values.
 
@@ -49,23 +49,24 @@ The following table lists the preference variables and their default values.
 | [`$PSSessionApplicationName`][18]                | `'wsman'`                                                        |
 | [`$PSSessionConfigurationName`][19]              | `'http://schemas.microsoft.com/powershell/Microsoft.PowerShell'` |
 | [`$PSSessionOption`][20]                         | [`PSSessionOption`][58] object                                   |
-| [`$PSStyle`][12]                                 | [`PSStyle`][57] object                                           |
-| [`$Transcript`][21]                              | `$Null` (none)                                                   |
-| [`$VerbosePreference`][22]                       | [`SilentlyContinue`][52]                                         |
-| [`$WarningPreference`][23]                       | [`Continue`][52]                                                 |
-| [`$WhatIfPreference`][24]                        | `$False`                                                         |
+| [`$PSStyle`][21]                                 | [`PSStyle`][57] object                                           |
+| [`$Transcript`][22]                              | `$Null` (none)                                                   |
+| [`$VerbosePreference`][23]                       | [`SilentlyContinue`][52]                                         |
+| [`$WarningPreference`][24]                       | [`Continue`][52]                                                 |
+| [`$WhatIfPreference`][25]                        | `$False`                                                         |
 
 PowerShell includes the following environment variables that store user
 preferences. For more information about these environment variables, see
-[about_Environment_Variables][27].
+[about_Environment_Variables][28].
 
-- `env:PSExecutionPolicyPreference`
+- `$env:PSExecutionPolicyPreference`
 - `$env:PSModulePath`
 
 > [!NOTE]
-> Changes to preference variable only take effect in scripts and functions if
-> those scripts or functions are defined in the same scope as the scope in
-> which preference was used. For more information, see [about_Scopes][38].
+> Changes to preference variables apply only in the scope they are made
+> and any child scopes thereof. For example, you can limit the effects of
+> changing a preference variable to a single function or script. For more
+> information, see [about_Scopes][38].
 
 ## Working with preference variables
 
@@ -116,7 +117,8 @@ enumeration values: **High**, **Medium**, **Low**, or **None**.
 Cmdlets and functions are assigned a risk of **High**, **Medium**, or **Low**.
 When the value of the `$ConfirmPreference` variable is less than or equal to
 the risk assigned to a cmdlet or function, PowerShell automatically prompts you
-for confirmation before running the cmdlet or function.
+for confirmation before running the cmdlet or function. For more information
+about assigning a risk to cmdlets or functions, see [about_Functions_CmdletBindingAttribute][64].
 
 If the value of the `$ConfirmPreference` variable is **None**, PowerShell never
 automatically prompts you before running a cmdlet or function.
@@ -164,11 +166,11 @@ Cmdlets and functions that might pose a risk to the system have a **Confirm**
 parameter that you can use to request or suppress confirmation for a single
 command.
 
-Because most cmdlets and functions use the default risk value,
-**ConfirmImpact**, of **Medium**, and the default value of `$ConfirmPreference`
-is **High**, automatic confirmation rarely occurs. However, you can activate
-automatic confirmation by changing the value of `$ConfirmPreference` to
-**Medium** or **Low**.
+Most cmdlets and functions keep the default value of **Medium** for **ConfirmImpact**.
+`$ConfirmPreference` is set to **High** by default. Therefore, it's rare that commands
+automatically prompt for confirmation when users don't specify the **Confirm** parameter.
+To extend automatic confirmation prompting to more cmdlets and functions, set the value
+of `$ConfirmPreference` to **Medium** or **Low**.
 
 ### Examples
 
@@ -243,19 +245,23 @@ changing the value of `$DebugPreference`.
 
 You can use the **Debug** common parameter of a cmdlet to display or hide the
 debugging messages for a specific command. For more information, see
-[about_CommonParameters][26].
+[about_CommonParameters][27].
 
 The valid values are as follows:
 
+- **Break** - Enter the debugger when an error occurs or when an exception is
+  raised.
 - **Stop**: Displays the debug message and stops executing. Writes an error to
   the console.
 - **Inquire**: Displays the debug message and asks you whether you want to
-  continue. Adding the **Debug** common parameter to a command, when the
-  command is configured to generate a debugging message, changes the value of
-  the `$DebugPreference` variable to **Inquire**.
+  continue.
 - **Continue**: Displays the debug message and continues with execution.
 - **SilentlyContinue**: (Default) No effect. The debug message isn't displayed
   and execution continues without interruption.
+
+Adding the **Debug** common parameter to a command, when the command is
+configured to generate a debugging message, changes the value of the
+`$DebugPreference` variable to **Continue**.
 
 ### Examples
 
@@ -398,7 +404,7 @@ The valid values are as follows:
 `$ErrorActionPreference` and the **ErrorAction** parameter don't affect how
 PowerShell responds to terminating errors that stop cmdlet processing. For more
 information about the **ErrorAction** common parameter, see
-[about_CommonParameters][26].
+[about_CommonParameters][27].
 
 Many native commands write to `stderr` as an alternative stream for additional
 information. This behavior can cause confusion when looking through errors or
@@ -468,7 +474,7 @@ the extra object generated to the `$Error` variable.
 ```powershell
 # Change the ErrorActionPreference to 'Stop'
 $ErrorActionPreference = 'Stop'
-# Error message is is generated and script stops processing
+# Error message is generated and script stops processing
 Write-Error -Message 'Test Error' ; Write-Host 'Hello World'
 
 # Show the ActionPreferenceStopException and the error generated
@@ -587,7 +593,7 @@ ObjectNotFound: (C:\nofile.txt:String) [Get-ChildItem], ItemNotFoundException
 This example demonstrates that the value of `$ErrorView` only affects the error
 display. It doesn't change the structure of the error object that's stored in
 the `$Error` automatic variable. For information about the `$Error` automatic
-variable, see [about_automatic_variables][25].
+variable, see [about_automatic_variables][26].
 
 The following command takes the **ErrorRecord** object associated with the most
 recent error in the error array, **element 0**, and formats the properties of
@@ -735,13 +741,12 @@ The `$InformationPreference` variable takes one of the
 
 The valid values are as follows:
 
+- **Break** - Enter the debugger when you write to the Information stream.
 - **Stop**: Stops a command or script at an occurrence of the
   `Write-Information` command.
 - **Inquire**: Displays the informational message that you specify in a
   `Write-Information` command, then asks whether you want to continue.
 - **Continue**: Displays the informational message, and continues running.
-- **Suspend** is only available for workflows which aren't supported in
-  PowerShell 6 and beyond.
 - **SilentlyContinue**: (Default) No effect. The informational messages aren't
   displayed, and the script continues without interruption.
 
@@ -866,12 +871,12 @@ Remove-Variable OFS
 
 ## $OutputEncoding
 
-Determines the character encoding method that PowerShell uses when it sends
-text to other applications.
+Determines the character encoding method that PowerShell uses when piping data
+into native applications.
 
-For example, if an application returns Unicode strings to PowerShell, you might
-need to change the value to **UnicodeEncoding** to send the characters
-correctly.
+> [!NOTE]
+> In the majority of scenarios, the value for `$OutputEncoding` should align
+> to the value of `[Console]::InputEncoding`.
 
 The valid values are as follows: Objects derived from an Encoding class, such
 as [**ASCIIEncoding**][59], [**UTF7Encoding**][62], [**UTF8Encoding**][63],
@@ -881,10 +886,6 @@ as [**ASCIIEncoding**][59], [**UTF7Encoding**][62], [**UTF8Encoding**][63],
 
 ### Examples
 
-This example shows how to make the Windows `findstr.exe` command work in
-PowerShell on a computer that's localized for a language that uses Unicode
-characters, such as Chinese.
-
 The first command finds the value of `$OutputEncoding`. Because the value is an
 encoding object, display only its **EncodingName** property.
 
@@ -892,40 +893,52 @@ encoding object, display only its **EncodingName** property.
 $OutputEncoding.EncodingName
 ```
 
-In this example, a `findstr.exe` command is used to search for two Chinese
-characters that are present in the `Test.txt` file. When this `findstr.exe`
-command is run in the Windows Command Prompt (`cmd.exe`), `findstr.exe` finds
-the characters in the text file. However, when you run the same `findstr.exe`
-command in PowerShell, the characters aren't found because the PowerShell sends
-them to `findstr.exe` in ASCII text, instead of in Unicode text.
+The remaining examples use the following PowerShell script saved as
+`hexdump.ps1` to illustrate the behavior of `$OutputEncoding`.
 
 ```powershell
-findstr <Unicode-characters>
+$inputStream = [Console]::OpenStandardInput()
+try {
+    $buffer = [byte[]]::new(1024)
+    $read = $inputStream.Read($buffer, 0, $buffer.Length)
+    Format-Hex -InputObject $buffer -Count $read
+} finally {
+    $inputStream.Dispose()
+}
 ```
 
-To make the command work in PowerShell, set the value of `$OutputEncoding` to
-the value of the **OutputEncoding** property of the console, that's based on
-the locale selected for Windows. Because **OutputEncoding** is a static
-property of the console, use double-colons (`::`) in the command.
+The following example shows how the string value `café` is encoded to bytes
+when piped into `hexdump.ps1` created above. It demonstrates that the string
+value is encoded using the [**UTF8Encoding**][63] scheme.
 
 ```powershell
-$OutputEncoding = [console]::OutputEncoding
-$OutputEncoding.EncodingName
+'café' | pwsh -File ./hexdump.ps1
 ```
 
 ```Output
-OEM United States
+   Label: Byte[] (System.Byte[]) <28873E25>
+
+          Offset Bytes                                           Ascii
+                 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+          ------ ----------------------------------------------- -----
+0000000000000000 63 61 66 C3 A9 0D 0A                            cafÃ©��
 ```
 
-After the encoding change, the `findstr.exe` command finds the Unicode
-characters.
+The following example shows how the bytes change when changing the encoding
+to [**UnicodeEncoding**][60].
 
 ```powershell
-findstr <Unicode-characters>
+$OutputEncoding = [System.Text.Encoding]::Unicode
+'café' | pwsh -File ./hexdump.ps1
 ```
 
 ```Output
-test.txt:         <Unicode-characters>
+   Label: Byte[] (System.Byte[]) <515A7DC3>
+
+          Offset Bytes                                           Ascii
+                 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+          ------ ----------------------------------------------- -----
+0000000000000000 FF FE 63 00 61 00 66 00 E9 00 0D 00 0A 00       ÿþc a f é � �
 ```
 
 ## $ProgressPreference
@@ -941,6 +954,7 @@ enumeration values: **SilentlyContinue**, **Stop**, **Continue**, **Inquire**,
 
 The valid values are as follows:
 
+- **Break** - Enter the debugger when you write to the Progress stream.
 - **Stop**: Doesn't display the progress bar. Instead, it displays an error
   message and stops executing.
 - **Inquire**: Doesn't display the progress bar. Prompts for permission to
@@ -970,30 +984,25 @@ preference variable is used by cmdlets that send email, such as the
 
 ## $PSModuleAutoloadingPreference
 
-Enables and disables automatic importing of modules in the session. **All** is
-the default. To import a module, get or use any command in the module. For
-example, use `Get-Command`. The `$PSModuleAutoloadingPreference` variable does
-not exist by default. The default behavior when the variable isn't defined is
-the same as `$PSModuleAutoloadingPreference = 'All'`.
+Enables and disables automatic importing of modules in the session. The
+`$PSModuleAutoloadingPreference` variable doesn't exist by default. The default
+behavior when the variable isn't defined is the same as
+`$PSModuleAutoloadingPreference = 'All'`.
 
-Regardless of the variable's value, you can use [Import-Module][41] to import a
-module.
+To automatically import a module, get or use a command contained in the module.
 
 The `$PSModuleAutoloadingPreference` variable takes one of the
-[`PSModuleAutoLoadingPreference`][56] enumeration values: **None**,
-**ModuleQualified**, or **All**.
+[`PSModuleAutoLoadingPreference`][58] enumeration values:
 
-Valid values are:
-
-- **All**: Modules are imported automatically on first-use.
-- **ModuleQualified**: Modules are imported automatically only when a user uses
+- `All`: Modules are imported automatically on first-use.
+- `ModuleQualified`: Modules are imported automatically only when a user uses
   the module-qualified name of a command in the module. For example, if the
   user types `MyModule\MyCommand`, PowerShell imports the **MyModule** module.
-- **None**: Automatic importing of modules is disabled in the session. To
-  import a module, use the `Import-Module` cmdlet.
+- `None`: Disables the automatic importing of modules. To import a module, use
+  the `Import-Module` cmdlet.
 
 For more information about automatic importing of modules, see
-[about_Modules][31].
+[about_Modules][33].
 
 ## $PSNativeCommandArgumentPassing
 
@@ -1007,36 +1016,44 @@ line is parsed for native commands. The new `$PSNativeCommandArgumentPassing`
 preference variable controls this behavior.
 
 > [!CAUTION]
-> The new behavior is a **breaking change** from the current behavior. This may
-> break scripts and automation that work around the various issues when
-> invoking native applications. Historically, quotes must be escaped and it's
-> not possible to provide empty arguments to a native application.
+> The new behavior is a **breaking change** from the previous behavior. This
+> may break scripts and automation that work around the various issues when
+> invoking native applications.
 
 The automatic variable `$PSNativeCommandArgumentPassing` allows you to select
 the behavior at runtime. The valid values are `Legacy`, `Standard`, and
-`Windows`. The default behavior is platform specific. On Windows platforms, the
-default setting is `Windows` and non-Windows platforms default to `Standard`.
+`Windows`. `Legacy` is the historic behavior.
 
-`Legacy` is the historic behavior. The behavior of `Windows` and `Standard`
-mode are the same except, in `Windows` mode, invocations of the following files
-automatically use the `Legacy` style argument passing.
+The `$PSNativeCommandArgumentPassing` variable is defined by default but the
+value is platform specific.
+
+- On Windows, the preference is set to `Windows`.
+- On non-Windows platforms, the preference is set to `Standard`.
+- If you have removed the `$PSNativeCommandArgumentPassing` variable,
+  PowerShell uses the `Standard` behavior.
+
+The behavior of `Windows` and `Standard` mode are the same except, in `Windows`
+mode, PowerShell uses the `Legacy` behavior of argument passing when you run
+the following files.
 
 - `cmd.exe`
 - `cscript.exe`
+- `find.exe`
+- `sqlcmd.exe`
 - `wscript.exe`
-- ending with `.bat`
-- ending with `.cmd`
-- ending with `.js`
-- ending with `.vbs`
-- ending with `.wsf`
+- Files ending with:
+  - `.bat`
+  - `.cmd`
+  - `.js`
+  - `.vbs`
+  - `.wsf`
 
 If the `$PSNativeCommandArgumentPassing` is set to either `Legacy` or
 `Standard`, the parser doesn't check for these files. For examples of the new
 behavior, see [about_Parsing][33].
 
 This experimental feature also added the ability to trace parameter binding for
-native commands. For more information, see
-[Trace-Command][47].
+native commands. For more information, see [Trace-Command][47].
 
 ## $PSSessionApplicationName
 
@@ -1195,8 +1212,13 @@ Used by `Start-Transcript` to specify the name and location of the transcript
 file. If you don't specify a value for the **Path** parameter,
 `Start-Transcript` uses the path in the value of the `$Transcript` global
 variable. If you haven't created this variable, `Start-Transcript` stores the
-transcripts in the `$HOME\My Documents` directory as
-`\PowerShell_transcript.<time-stamp>.txt` files.
+transcripts in the following location using the default name:
+
+- On Windows: `$HOME\Documents`
+- On Linux or macOS: `$HOME`
+
+The default filename is:
+`PowerShell_transcript.<computername>.<random>.<timestamp>.txt`.
 
 ## $VerbosePreference
 
@@ -1213,6 +1235,7 @@ enumeration values: **SilentlyContinue**, **Stop**, **Continue**, **Inquire**,
 
 The valid values are as follows:
 
+- **Break** - Enter the debugger when you write to the Verbose stream.
 - **Stop**: Displays the verbose message and an error message and then stops
   executing.
 - **Inquire**: Displays the verbose message and then displays a prompt that
@@ -1223,7 +1246,7 @@ The valid values are as follows:
 
 You can use the **Verbose** common parameter of a cmdlet to display or hide the
 verbose messages for a specific command. For more information, see
-[about_CommonParameters][26].
+[about_CommonParameters][27].
 
 ### Examples
 
@@ -1332,6 +1355,7 @@ enumeration values: **SilentlyContinue**, **Stop**, **Continue**, **Inquire**,
 
 The valid values are as follows:
 
+- **Break** - Enter the debugger when a warning message is written.
 - **Stop**: Displays the warning message and an error message and then stops
   executing.
 - **Inquire**: Displays the warning message and then prompts for permission to
@@ -1343,7 +1367,7 @@ The valid values are as follows:
 
 You can use the **WarningAction** common parameter of a cmdlet to determine how
 PowerShell responds to warnings from a particular command. For more
-information, see [about_CommonParameters][26].
+information, see [about_CommonParameters][27].
 
 ### Examples
 
@@ -1638,9 +1662,9 @@ At line:1 char:1
 
 ## See also
 
-- [about_automatic_variables][25]
-- [about_CommonParameters][26]
-- [about_Environment_Variables][27]
+- [about_automatic_variables][26]
+- [about_CommonParameters][27]
+- [about_Environment_Variables][28]
 - [about_Profiles][34]
 - [about_Remote][37]
 - [about_Scopes][38]
@@ -1667,16 +1691,16 @@ At line:1 char:1
 [18]: #pssessionapplicationname
 [19]: #pssessionconfigurationname
 [20]: #pssessionoption
-[21]: #transcript
-[22]: #verbosepreference
-[23]: #warningpreference
-[24]: #whatifpreference
-[25]: about_Automatic_Variables.md
-[26]: about_CommonParameters.md
-[27]: about_Environment_Variables.md
+[21]: #psstyle
+[22]: #transcript
+[23]: #verbosepreference
+[24]: #warningpreference
+[25]: #whatifpreference
+[26]: about_Automatic_Variables.md
+[27]: about_CommonParameters.md
+[28]: about_Environment_Variables.md
 [29]: about_Hash_Tables.md
 [30]: about_History.md
-[31]: about_Modules.md
 [32]: about_Parameters_Default_Values.md
 [33]: about_parsing.md
 [34]: about_Profiles.md
@@ -1686,7 +1710,6 @@ At line:1 char:1
 [38]: about_Scopes.md
 [39]: about_Variables.md
 [40]: xref:Microsoft.PowerShell.Core.Enter-PSSession
-[41]: xref:Microsoft.PowerShell.Core.Import-Module
 [42]: xref:Microsoft.PowerShell.Core.Invoke-Command
 [43]: xref:Microsoft.PowerShell.Core.New-PSSession
 [44]: xref:Microsoft.PowerShell.Core.New-PSSessionOption
@@ -1701,7 +1724,6 @@ At line:1 char:1
 [53]: xref:System.Management.Automation.ConfirmImpact
 [54]: xref:System.Management.Automation.ErrorCategoryInfo
 [55]: xref:System.Management.Automation.ErrorView
-[56]: xref:System.Management.Automation.PSModuleAutoLoadingPreference
 [57]: xref:System.Management.Automation.PSStyle
 [58]: xref:System.Management.Automation.Remoting.PSSessionOption
 [59]: xref:System.Text.ASCIIEncoding
@@ -1709,3 +1731,4 @@ At line:1 char:1
 [61]: xref:System.Text.UTF32Encoding
 [62]: xref:System.Text.UTF7Encoding
 [63]: xref:System.Text.UTF8Encoding
+[64]: about_Functions_CmdletBindingAttribute.md

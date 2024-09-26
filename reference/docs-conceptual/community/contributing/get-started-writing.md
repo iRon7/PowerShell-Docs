@@ -1,7 +1,6 @@
 ---
 description: This article is an overview of how to get started as a contributor to the PowerShell documentation.
 ms.date: 07/26/2022
-ms.topic: conceptual
 title: Get started contributing to PowerShell documentation
 ---
 # Get started contributing to PowerShell documentation
@@ -96,7 +95,7 @@ more information and best practices.
 [2]: https://github.com/MicrosoftDocs/PowerShell-Docs/tree/main/reference
 [3]: https://github.com/MicrosoftDocs/PowerShell-Docs/tree/main/reference/docs-conceptual
 [4]: https://github.com/PowerShell/powershell-rfc/blob/master/RFC0000-RFC-Process.md
-[5]: /contribute/#quick-edits-to-existing-documents
+[5]: /contribute/content/how-to-write-quick-edits
 [6]: /contribute/how-to-write-workflows-major#making-your-changes
 [7]: /contribute/get-started-setup-local#fork-the-repository
 [8]: pull-requests.md

@@ -2,7 +2,7 @@
 external help file: Microsoft.PowerShell.Commands.Utility.dll-Help.xml
 Locale: en-US
 Module Name: Microsoft.PowerShell.Utility
-ms.date: 12/12/2022
+ms.date: 06/28/2023
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.utility/out-gridview?view=powershell-5.1&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: Out-GridView
@@ -99,7 +99,7 @@ This example saves cmdlet output in a variable then sends it to `Out-GridView`.
 ```
 
 `Get-ChildItem` gets all the files in the PowerShell installation directory and its subdirectories
-using the the `$PSHOME` automatic variable. The parentheses in the command establish the order of
+using the `$PSHOME` automatic variable. The parentheses in the command establish the order of
 operations. As a result, the output from the `Get-ChildItem` command is saved in the `$A` variable
 before it is sent to `Out-GridView`.
 
@@ -111,7 +111,7 @@ This example displays the processes that are running on the Server01 computer in
 Get-Process -ComputerName "Server01" | ogv -Title "Processes - Server01"
 ```
 
-The examle uses `ogv`, which is the alias for the `Out-GridView` cmdlet. The **Title** parameter
+The example uses `ogv`, which is the alias for the `Out-GridView` cmdlet. The **Title** parameter
 specifies the window title.
 
 ### Example 6: Output data from remote computers to a grid view
@@ -290,6 +290,10 @@ When you use the **PassThru** parameter, this cmdlet returns objects representin
 rows.
 
 ## NOTES
+
+Windows PowerShell includes the following aliases for `Out-GridView`:
+
+- `ogv`
 
 You cannot use a remote command to open a grid view window on another computer.
 

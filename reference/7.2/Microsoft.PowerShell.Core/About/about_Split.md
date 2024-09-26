@@ -4,7 +4,7 @@ Locale: en-US
 ms.date: 03/30/2021
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_split?view=powershell-7.2&WT.mc_id=ps-gethelp
 schema: 2.0.0
-title: about Split
+title: about_Split
 ---
 # about_Split
 
@@ -233,7 +233,7 @@ The RegexMatch options are:
 - **IgnoreCase**: Forces case-insensitive matching, even if the -cSplit
   operator is specified.
 - **CultureInvariant**: Ignores cultural differences in language
-  when evaluting the delimiter. Valid only with RegexMatch.
+  when evaluating the delimiter. Valid only with RegexMatch.
 - **IgnorePatternWhitespace**: Ignores unescaped whitespace and
   comments marked with the number sign (#). Valid only with
   RegexMatch.

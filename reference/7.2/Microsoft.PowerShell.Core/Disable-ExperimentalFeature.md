@@ -2,7 +2,7 @@
 external help file: System.Management.Automation.dll-Help.xml
 Locale: en-US
 Module Name: Microsoft.PowerShell.Core
-ms.date: 12/09/2022
+ms.date: 12/04/2023
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/disable-experimentalfeature?view=powershell-7.2&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: Disable-ExperimentalFeature
@@ -37,7 +37,7 @@ file is updated for the user to not enable that feature once PowerShell is resta
 Upon success nothing is output to the pipeline and only a warning message is displayed.
 
 ```powershell
-PS C:\> Disable-ExperimentalFeature PSImplicitRemotingBatching
+Disable-ExperimentalFeature -Name PSImplicitRemotingBatching
 ```
 
 ```Output
@@ -141,3 +141,7 @@ Changes to state of an experimental feature only take effect on restart of Power
 [Enable-ExperimentalFeature](Enable-ExperimentalFeature.md)
 
 [Get-ExperimentalFeature](Get-ExperimentalFeature.md)
+
+[about_Experimental_Features](/powershell/module/microsoft.powershell.core/about/about_experimental_features)
+
+[Using Experimental Features](/powershell/scripting/learn/experimental-features)

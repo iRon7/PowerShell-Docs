@@ -2,7 +2,7 @@
 external help file: Microsoft.PowerShell.Commands.Utility.dll-Help.xml
 Locale: en-US
 Module Name: Microsoft.PowerShell.Utility
-ms.date: 12/23/2022
+ms.date: 01/25/2024
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.utility/invoke-webrequest?view=powershell-5.1&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: Invoke-WebRequest
@@ -16,12 +16,13 @@ Gets content from a web page on the internet.
 ## SYNTAX
 
 ```
-Invoke-WebRequest [-UseBasicParsing] [-Uri] <Uri> [-WebSession <WebRequestSession>] [-SessionVariable <String>]
- [-Credential <PSCredential>] [-UseDefaultCredentials] [-CertificateThumbprint <String>]
- [-Certificate <X509Certificate>] [-UserAgent <String>] [-DisableKeepAlive] [-TimeoutSec <Int32>]
- [-Headers <IDictionary>] [-MaximumRedirection <Int32>] [-Method <WebRequestMethod>] [-Proxy <Uri>]
- [-ProxyCredential <PSCredential>] [-ProxyUseDefaultCredentials] [-Body <Object>] [-ContentType <String>]
- [-TransferEncoding <String>] [-InFile <String>] [-OutFile <String>] [-PassThru] [<CommonParameters>]
+Invoke-WebRequest [-UseBasicParsing] [-Uri] <Uri> [-WebSession <WebRequestSession>]
+ [-SessionVariable <String>] [-Credential <PSCredential>] [-UseDefaultCredentials]
+ [-CertificateThumbprint <String>] [-Certificate <X509Certificate>] [-UserAgent <String>]
+ [-DisableKeepAlive] [-TimeoutSec <Int32>] [-Headers <IDictionary>] [-MaximumRedirection <Int32>]
+ [-Method <WebRequestMethod>] [-Proxy <Uri>] [-ProxyCredential <PSCredential>]
+ [-ProxyUseDefaultCredentials] [-Body <Object>] [-ContentType <String>] [-TransferEncoding <String>]
+ [-InFile <String>] [-OutFile <String>] [-PassThru] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -49,10 +50,10 @@ This cmdlet was introduced in Windows PowerShell 3.0.
 This example uses the `Invoke-WebRequest` cmdlet to send a web request to the Bing.com site.
 
 ```powershell
-$Response = Invoke-WebRequest -URI https://www.bing.com?q=how+many+feet+in+a+mile
-$Response.AllElements | Where-Object {
-    $_.name -like "* Value" -and $_.tagName -eq "INPUT"
-} | Select-Object Name, Value
+$Response = Invoke-WebRequest -UseBasicParsing -URI https://www.bing.com?q=how+many+feet+in+a+mile
+$Response.InputFields |
+    Where-Object name -like "* Value" |
+    Select-Object name, value
 ```
 
 ```Output
@@ -62,11 +63,10 @@ From Value 1
 To Value   5280
 ```
 
-The first command issues the request and saves the response in the `$Response` variable.
-
-The second command filters the objects in the **AllElements** property where the **name** property
-is like "* Value" and the **tagName** is "INPUT". The filtered results are piped to `Select-Object`
-to select the **name** and **value** properties.
+The data returned by `Invoke-WebRequest` is stored in the `$Response` variable. The **InputFields**
+property of the response contains the form fields. `Where-Object` is used to filter the form fields
+to those where the **name** property is like "* Value". The filtered results are piped to
+`Select-Object` to select the **name** and **value** properties.
 
 ### Example 2: Use a stateful web service
 
@@ -263,11 +263,11 @@ Accept wildcard characters: False
 Specifies the digital public key certificate (X509) of a user account that has permission to send
 the request. Enter the certificate thumbprint of the certificate.
 
-Certificates are used in client certificate-based authentication. They can be mapped only to local
-user accounts; they don't work with domain accounts.
+Certificates are used in client certificate-based authentication. Certificates can only be mapped
+only to local user accounts, not domain accounts.
 
-To get a certificate thumbprint, use the `Get-Item` or `Get-ChildItem` command in the PowerShell
-`Cert:` drive.
+To see the certificate thumbprint, use the `Get-Item` or `Get-ChildItem` command to find the
+certificate in `Cert:\CurrentUser\My`.
 
 ```yaml
 Type: System.String

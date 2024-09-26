@@ -1,10 +1,10 @@
 ---
 description: Describes the operators that are supported by PowerShell.
 Locale: en-US
-ms.date: 12/02/2022
+ms.date: 09/03/2024
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_operators?view=powershell-5.1&WT.mc_id=ps-gethelp
 schema: 2.0.0
-title: about Operators
+title: about_Operators
 ---
 # about_Operators
 
@@ -31,7 +31,7 @@ operators on any .NET type that implements them, such as: `Int`, `String`,
 Bitwise operators (`-band`, `-bor`, `-bxor`, `-bnot`, `-shl`, `-shr`)
 manipulate the bit patterns in values.
 
-For more information, see [about_Arithmetic_Operators][04].
+For more information, see [about_Arithmetic_Operators][05].
 
 ## Assignment Operators
 
@@ -39,7 +39,7 @@ Use assignment operators (`=`, `+=`, `-=`, `*=`, `/=`, `%=`) to assign, change,
 or append values to variables. You can combine arithmetic operators with
 assignment to assign the result of the arithmetic operation to a variable.
 
-For more information, see [about_Assignment_Operators][05].
+For more information, see [about_Assignment_Operators][06].
 
 ## Comparison Operators
 
@@ -88,8 +88,8 @@ For more information, see [about_Split][21] and [about_Join][12].
 
 ## Type Operators
 
-Use the type operators (`-is`, `-isnot`, `-as`) to find or change the .NET
-Framework type of an object.
+Use the type operators (`-is`, `-isnot`, `-as`) to find or change the .NET type
+of an object.
 
 For more information, see [about_Type_Operators][22].
 
@@ -99,7 +99,7 @@ Use the unary `++`  and `--` operators to increment or decrement values and
 `-` for negation. For example, to increment the variable `$a` from `9` to
 `10`, you type `$a++`.
 
-For more information, see [about_Arithmetic_Operators][04].
+For more information, see [about_Arithmetic_Operators][05].
 
 ## Special Operators
 
@@ -114,6 +114,8 @@ expressions. For example: `(1 + 2) / 3`
 
 However, in PowerShell, there are additional behaviors.
 
+#### Grouping result expressions
+
 `(...)` allows you to let output from a _command_ participate in an expression.
 For example:
 
@@ -126,8 +128,35 @@ True
 > Wrapping a command in parentheses causes the automatic variable `$?` to be
 > set to `$true`, even when the enclosed command itself set `$?` to `$false`.
 > For example, `(Get-Item /Nosuch); $?` unexpectedly yields **True**. For
-> more information about `$?`, see
-> [about_Automatic_Variables][06].
+> more information about `$?`, see [about_Automatic_Variables][06].
+
+#### Piping grouped expressions
+
+When used as the first segment of a pipeline, wrapping a command or expression
+in parentheses invariably causes _enumeration_ of the expression result. If the
+parentheses wrap a _command_, it's run to completion with all output _collected
+in memory_ before the results are sent through the pipeline.
+
+For example, the outputs for these statements are different:
+
+```powershell
+PS> ConvertFrom-Json '["a", "b"]'   | ForEach-Object { "The value is '$_'" }
+
+The value is 'a b'
+
+PS> (ConvertFrom-Json '["a", "b"]') | ForEach-Object { "The value is '$_'" }
+
+The value is 'a'
+The value is 'b'
+```
+
+Grouping an expression before piping also ensures that subsequent
+object-by-object processing can't interfere with the enumeration the command
+uses to produce its output.
+
+For example, piping the output from `Get-ChildItem` to `Rename-Item` can have
+unexpected effects where an item is renamed, then discovered again and renamed
+a second time.
 
 #### Grouping assignment statements
 
@@ -184,19 +213,12 @@ in the body of the `if` statement.
 > between the assignment operator (`=`) and the equality-comparison operator
 > (`-eq`).
 
-#### Piping grouped expressions
-
-When used as the first segment of a pipeline, wrapping a command or expression
-in parentheses invariably causes _enumeration_ of the expression result. If the
-parentheses wrap a _command_, it's run to completion with all output _collected
-in memory_ before the results are sent through the pipeline.
-
 ### Subexpression operator `$( )`
 
 Returns the result of one or more statements. For a single result, returns a
-scalar. For multiple results, returns an array. Use this when you want to use
-an expression within another expression. For example, to embed the results of
-command in a string expression.
+[scalar][04]. For multiple results, returns an array. Use this when you want to
+use an expression within another expression. For example, to embed the results
+of command in a string expression.
 
 ```powershell
 PS> "Today is $(Get-Date)"
@@ -240,9 +262,13 @@ table. For more information, see [about_Hash_Tables][09].
 ### Call operator `&`
 
 Runs a command, script, or script block. The call operator, also known as the
-"invocation operator", lets you run commands that are stored in variables and
+_invocation operator_, lets you run commands that are stored in variables and
 represented by strings or script blocks. The call operator executes in a child
-scope. For more about scopes, see [about_Scopes][19].
+scope. For more about scopes, see [about_Scopes][19]. You can use this to build
+strings containing the command, parameters, and arguments you need, and then
+invoke the string as if it were a command. The strings that you create must
+follow the same parsing rules as a command that you type at the command line.
+For more information, see [about_Parsing][08].
 
 This example stores a command in a string and executes it using the call
 operator.
@@ -263,7 +289,7 @@ PS> $c = "Get-Service -Name Spooler"
 PS> $c
 Get-Service -Name Spooler
 PS> & $c
-& : The term 'Get-Service -Name Spooler' isn't recognized as the name of a
+& : The term 'Get-Service -Name Spooler' is not recognized as the name of a
 cmdlet, function, script file, or operable program. Check the spelling of
 the name, or if a path was included, verify that the path is correct and
 try again.
@@ -279,8 +305,8 @@ when using the call operator.
 
 ```
 PS> & "1+1"
-& : The term '1+1' is not recognized as the name of a cmdlet, function, script
-file, or operable program. Check the spelling of the name, or if a path was
+&: The term '1+1' is not recognized as a name of a cmdlet, function, script
+file, or executable program. Check the spelling of the name, or if a path was
 included, verify that the path is correct and try again.
 At line:1 char:2
 + & "1+1"
@@ -291,11 +317,12 @@ PS> Invoke-Expression "1+1"
 2
 ```
 
-You can use the call operator to execute scripts using their filenames. The
-example below shows a script filename that contains spaces. When you try to
-execute the script, PowerShell instead displays the contents of the quoted
-string containing the filename. The call operator allows you to execute the
-contents of the string containing the filename.
+You can execute a script using its filename. A script file must have a `.ps1`
+file extension to be executable. Files that have spaces in their path must be
+enclosed in quotes. If you try to execute the quoted path, PowerShell displays
+the contents of the quoted string instead of running the script. The call
+operator allows you to execute the contents of the string containing the
+filename.
 
 ```
 PS C:\Scripts> Get-ChildItem
@@ -368,9 +395,23 @@ automatic variable `$args` is preserved.
 
 ### Format operator `-f`
 
-Formats strings by using the format method of string objects. Enter the format
-string on the left side of the operator and the objects to be formatted on the
-right side of the operator.
+Provide access to the .NET composite formatting feature. A composite format
+string consists of fixed text intermixed with indexed placeholders, called
+_format items_. These format items correspond to the objects in the list.
+
+Each format item takes the following form and consists of the following
+components:
+
+`{index[,alignment][:formatString]}`
+
+The matching braces (`{` and `}`) are required.
+
+The formatting operation yields a result string that consists of the original
+fixed text intermixed with the string representation of the objects in the
+list. For more information, see [Composite Formatting][02].
+
+Enter the composite format string on the left side of the operator and the
+objects to be formatted on the right side of the operator.
 
 ```powershell
 "{0} {1,-10} {2:N}" -f 1,"hello",[math]::pi
@@ -402,9 +443,6 @@ escape them by doubling the curly braces.
 ```Output
 foo vs. {0}
 ```
-
-For more information, see the [String.Format][01] method and
-[Composite Formatting][02].
 
 ### Index operator `[ ]`
 
@@ -498,8 +536,14 @@ You can also create ranges in reverse order.
 ```
 
 The start and end values of the range can be any pair of expressions that
-evaluate to an integer. For example, you could use the members of an
-enumeration for your start and end values.
+evaluate to an integer or a character. The endpoints of the range must be
+convertible to signed 32-bit integers (`[int32]`). Larger values cause an
+error. Also, if the range is captured in an array, the size of resulting array
+is limited to `268435448` (or `256mb - 8`). This is maximum size of an array in
+.NET Framework.
+
+For example, you could use the members of an enumeration for your start and end
+values.
 
 ```powershell
 PS> enum Food {
@@ -544,8 +588,8 @@ see [about_Member-Access_Enumeration][14].
 
 ### Static member operator `::`
 
-Calls the static properties and methods of a .NET Framework class. To find the
-static properties and methods of an object, use the Static parameter of the
+Calls the static properties and methods of a .NET class. To find the static
+properties and methods of an object, use the Static parameter of the
 `Get-Member` cmdlet. The member name may be an expression.
 
 ```powershell
@@ -555,8 +599,8 @@ static properties and methods of an object, use the Static parameter of the
 
 ## See also
 
-- [about_Arithmetic_Operators][04]
-- [about_Assignment_Operators][05]
+- [about_Arithmetic_Operators][05]
+- [about_Assignment_Operators][06]
 - [about_Comparison_Operators][07]
 - [about_Logical_Operators][13]
 - [about_Operator_Precedence][15]
@@ -567,13 +611,13 @@ static properties and methods of an object, use the Static parameter of the
 - [about_Redirection][18]
 
 <!-- link references -->
-[01]: /dotnet/api/system.string.format
 [02]: /dotnet/standard/base-types/composite-formatting
 [03]: /dotnet/standard/base-types/custom-numeric-format-strings#Specifier0
-[04]: about_Arithmetic_Operators.md
-[05]: about_Assignment_Operators.md
-[06]: about_Automatic_Variables.md
+[04]: /powershell/scripting/learn/glossary#scalar-value
+[05]: about_Arithmetic_Operators.md
+[06]: about_Assignment_Operators.md
 [07]: about_Comparison_Operators.md
+[08]: about_Parsing.md
 [09]: about_Hash_Tables.md
 [12]: about_Join.md
 [13]: about_logical_operators.md

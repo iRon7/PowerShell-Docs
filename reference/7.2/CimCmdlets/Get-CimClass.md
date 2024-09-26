@@ -2,7 +2,7 @@
 external help file: Microsoft.Management.Infrastructure.CimCmdlets.dll-Help.xml
 Locale: en-US
 Module Name: CimCmdlets
-ms.date: 12/09/2022
+ms.date: 09/11/2023
 online version: https://learn.microsoft.com/powershell/module/cimcmdlets/get-cimclass?view=powershell-7.2&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: Get-CimClass
@@ -248,7 +248,7 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
 ### -QualifierName
@@ -288,6 +288,13 @@ You can't pipe objects to this cmdlet.
 This cmdlet returns a CIM class object.
 
 ## NOTES
+
+PowerShell includes the following aliases for `Get-CimClass`:
+
+- Windows:
+  - `gcls`
+
+This cmdlet is only available on Windows platforms.
 
 ## RELATED LINKS
 

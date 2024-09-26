@@ -1,11 +1,11 @@
 ---
 description: Explains language modes and their effect on PowerShell sessions.
 Locale: en-US
-ms.date: 01/19/2023
+ms.date: 10/04/2023
 no-loc: [FullLanguage, ConstrainedLanguage, RestrictedLanguage, NoLanguage]
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_language_modes?view=powershell-5.1&WT.mc_id=ps-gethelp
 schema: 2.0.0
-title: about Language Modes
+title: about_Language_Modes
 ---
 # about_Language_Modes
 
@@ -153,15 +153,15 @@ versions of Windows.
 
 ### RestrictedLanguage mode
 
-The `RestrictedLanguage` mode was created for Windows RT, which is no longer
-supported. This mode is also used to process modules manifests loaded by
-`Import-Module`.
-
 In `RestrictedLanguage` mode, users can run commands (cmdlets, functions, CIM
-commands, and workflows), but can't use script blocks.
+commands, and workflows), but can't use script blocks. This mode is also used
+to process modules manifests loaded by `Import-Module`.
 
-By default, only the following variables are permitted in
-`RestrictedLanguage` mode:
+Beginning in PowerShell 7.2, the `New-Object` cmdlet is disabled in
+`RestrictedLanguage` mode when system lockdown is configured.
+
+By default, only the following variables are permitted in `RestrictedLanguage`
+mode:
 
 - `$PSCulture`
 - `$PSUICulture`
@@ -175,6 +175,7 @@ additional variables:
 - `$PSScriptRoot`
 - `$PSEdition`
 - `$EnabledExperimentalFeatures`
+- Any environment variables, like `$ENV:TEMP`
 
 Only the following comparison operators are permitted:
 

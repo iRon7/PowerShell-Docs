@@ -2,7 +2,7 @@
 external help file: Microsoft.PowerShell.Commands.Utility.dll-Help.xml
 Locale: en-US
 Module Name: Microsoft.PowerShell.Utility
-ms.date: 01/05/2023
+ms.date: 08/14/2024
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.utility/invoke-webrequest?view=powershell-7.4&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: Invoke-WebRequest
@@ -18,61 +18,70 @@ Gets content from a web page on the internet.
 ### StandardMethod (Default)
 
 ```
-Invoke-WebRequest [-UseBasicParsing] [-Uri] <Uri> [-HttpVersion <Version>] [-WebSession <WebRequestSession>]
- [-SessionVariable <String>] [-AllowUnencryptedAuthentication] [-Authentication <WebAuthenticationType>]
- [-Credential <PSCredential>] [-UseDefaultCredentials] [-CertificateThumbprint <String>]
- [-Certificate <X509Certificate>] [-SkipCertificateCheck] [-SslProtocol <WebSslProtocol>]
- [-Token <SecureString>] [-UserAgent <String>] [-DisableKeepAlive] [-TimeoutSec <Int32>]
- [-Headers <IDictionary>] [-MaximumRedirection <Int32>] [-MaximumRetryCount <Int32>]
- [-RetryIntervalSec <Int32>] [-Method <WebRequestMethod>] [-Proxy <Uri>] [-ProxyCredential <PSCredential>]
+Invoke-WebRequest [-UseBasicParsing] [-Uri] <Uri> [-HttpVersion <Version>]
+ [-WebSession <WebRequestSession>] [-SessionVariable <String>] [-AllowUnencryptedAuthentication]
+ [-Authentication <WebAuthenticationType>] [-Credential <PSCredential>] [-UseDefaultCredentials]
+ [-CertificateThumbprint <String>] [-Certificate <X509Certificate>] [-SkipCertificateCheck]
+ [-SslProtocol <WebSslProtocol>] [-Token <SecureString>] [-UserAgent <String>] [-DisableKeepAlive]
+ [-ConnectionTimeoutSeconds <Int32>] [-OperationTimeoutSeconds <Int32>] [-Headers <IDictionary>]
+ [-SkipHeaderValidation] [-AllowInsecureRedirect] [-MaximumRedirection <Int32>]
+ [-MaximumRetryCount <Int32>] [-PreserveAuthorizationOnRedirect] [-RetryIntervalSec <Int32>]
+ [-Method <WebRequestMethod>] [-PreserveHttpMethodOnRedirect]
+ [-UnixSocket <UnixDomainSocketEndPoint>] [-Proxy <Uri>] [-ProxyCredential <PSCredential>]
  [-ProxyUseDefaultCredentials] [-Body <Object>] [-Form <IDictionary>] [-ContentType <String>]
  [-TransferEncoding <String>] [-InFile <String>] [-OutFile <String>] [-PassThru] [-Resume]
- [-SkipHttpErrorCheck] [-PreserveAuthorizationOnRedirect] [-SkipHeaderValidation] [<CommonParameters>]
+ [-SkipHttpErrorCheck] [<CommonParameters>]
 ```
 
 ### StandardMethodNoProxy
 
 ```
-Invoke-WebRequest [-UseBasicParsing] [-Uri] <Uri> [-HttpVersion <Version>] [-WebSession <WebRequestSession>]
- [-SessionVariable <String>] [-AllowUnencryptedAuthentication] [-Authentication <WebAuthenticationType>]
- [-Credential <PSCredential>] [-UseDefaultCredentials] [-CertificateThumbprint <String>]
- [-Certificate <X509Certificate>] [-SkipCertificateCheck] [-SslProtocol <WebSslProtocol>]
- [-Token <SecureString>] [-UserAgent <String>] [-DisableKeepAlive] [-TimeoutSec <Int32>]
- [-Headers <IDictionary>] [-MaximumRedirection <Int32>] [-MaximumRetryCount <Int32>]
- [-RetryIntervalSec <Int32>] [-Method <WebRequestMethod>] -NoProxy [-Body <Object>] [-Form <IDictionary>]
- [-ContentType <String>] [-TransferEncoding <String>] [-InFile <String>] [-OutFile <String>] [-PassThru]
- [-Resume] [-SkipHttpErrorCheck] [-PreserveAuthorizationOnRedirect] [-SkipHeaderValidation]
- [<CommonParameters>]
+Invoke-WebRequest [-UseBasicParsing] [-Uri] <Uri> [-HttpVersion <Version>]
+ [-WebSession <WebRequestSession>] [-SessionVariable <String>] [-AllowUnencryptedAuthentication]
+ [-Authentication <WebAuthenticationType>] [-Credential <PSCredential>] [-UseDefaultCredentials]
+ [-CertificateThumbprint <String>] [-Certificate <X509Certificate>] [-SkipCertificateCheck]
+ [-SslProtocol <WebSslProtocol>] [-Token <SecureString>] [-UserAgent <String>] [-DisableKeepAlive]
+ [-ConnectionTimeoutSeconds <Int32>] [-OperationTimeoutSeconds <Int32>] [-Headers <IDictionary>]
+ [-SkipHeaderValidation] [-AllowInsecureRedirect] [-MaximumRedirection <Int32>]
+ [-MaximumRetryCount <Int32>] [-PreserveAuthorizationOnRedirect] [-RetryIntervalSec <Int32>]
+ [-Method <WebRequestMethod>] [-PreserveHttpMethodOnRedirect]
+ [-UnixSocket <UnixDomainSocketEndPoint>] [-NoProxy] [-Body <Object>] [-Form <IDictionary>]
+ [-ContentType <String>] [-TransferEncoding <String>] [-InFile <String>] [-OutFile <String>]
+ [-PassThru] [-Resume] [-SkipHttpErrorCheck] [<CommonParameters>]
 ```
 
 ### CustomMethod
 
 ```
-Invoke-WebRequest [-UseBasicParsing] [-Uri] <Uri> [-HttpVersion <Version>] [-WebSession <WebRequestSession>]
- [-SessionVariable <String>] [-AllowUnencryptedAuthentication] [-Authentication <WebAuthenticationType>]
- [-Credential <PSCredential>] [-UseDefaultCredentials] [-CertificateThumbprint <String>]
- [-Certificate <X509Certificate>] [-SkipCertificateCheck] [-SslProtocol <WebSslProtocol>]
- [-Token <SecureString>] [-UserAgent <String>] [-DisableKeepAlive] [-TimeoutSec <Int32>]
- [-Headers <IDictionary>] [-MaximumRedirection <Int32>] [-MaximumRetryCount <Int32>]
- [-RetryIntervalSec <Int32>] -CustomMethod <String> [-Proxy <Uri>] [-ProxyCredential <PSCredential>]
- [-ProxyUseDefaultCredentials] [-Body <Object>] [-Form <IDictionary>] [-ContentType <String>]
- [-TransferEncoding <String>] [-InFile <String>] [-OutFile <String>] [-PassThru] [-Resume]
- [-SkipHttpErrorCheck] [-PreserveAuthorizationOnRedirect] [-SkipHeaderValidation] [<CommonParameters>]
+Invoke-WebRequest [-UseBasicParsing] [-Uri] <Uri> [-HttpVersion <Version>]
+ [-WebSession <WebRequestSession>] [-SessionVariable <String>] [-AllowUnencryptedAuthentication]
+ [-Authentication <WebAuthenticationType>] [-Credential <PSCredential>] [-UseDefaultCredentials]
+ [-CertificateThumbprint <String>] [-Certificate <X509Certificate>] [-SkipCertificateCheck]
+ [-SslProtocol <WebSslProtocol>] [-Token <SecureString>] [-UserAgent <String>] [-DisableKeepAlive]
+ [-ConnectionTimeoutSeconds <Int32>] [-OperationTimeoutSeconds <Int32>] [-Headers <IDictionary>]
+ [-SkipHeaderValidation] [-AllowInsecureRedirect] [-MaximumRedirection <Int32>]
+ [-MaximumRetryCount <Int32>] [-PreserveAuthorizationOnRedirect] [-RetryIntervalSec <Int32>]
+ -CustomMethod <String> [-PreserveHttpMethodOnRedirect] [-UnixSocket <UnixDomainSocketEndPoint>]
+ [-Proxy <Uri>] [-ProxyCredential <PSCredential>] [-ProxyUseDefaultCredentials] [-Body <Object>]
+ [-Form <IDictionary>] [-ContentType <String>] [-TransferEncoding <String>] [-InFile <String>]
+ [-OutFile <String>] [-PassThru] [-Resume] [-SkipHttpErrorCheck] [<CommonParameters>]
 ```
 
 ### CustomMethodNoProxy
 
 ```
-Invoke-WebRequest [-UseBasicParsing] [-Uri] <Uri> [-HttpVersion <Version>] [-WebSession <WebRequestSession>]
- [-SessionVariable <String>] [-AllowUnencryptedAuthentication] [-Authentication <WebAuthenticationType>]
- [-Credential <PSCredential>] [-UseDefaultCredentials] [-CertificateThumbprint <String>]
- [-Certificate <X509Certificate>] [-SkipCertificateCheck] [-SslProtocol <WebSslProtocol>]
- [-Token <SecureString>] [-UserAgent <String>] [-DisableKeepAlive] [-TimeoutSec <Int32>]
- [-Headers <IDictionary>] [-MaximumRedirection <Int32>] [-MaximumRetryCount <Int32>]
- [-RetryIntervalSec <Int32>] -CustomMethod <String> -NoProxy [-Body <Object>] [-Form <IDictionary>]
- [-ContentType <String>] [-TransferEncoding <String>] [-InFile <String>] [-OutFile <String>] [-PassThru]
- [-Resume] [-SkipHttpErrorCheck] [-PreserveAuthorizationOnRedirect] [-SkipHeaderValidation]
- [<CommonParameters>]
+Invoke-WebRequest [-UseBasicParsing] [-Uri] <Uri> [-HttpVersion <Version>]
+ [-WebSession <WebRequestSession>] [-SessionVariable <String>] [-AllowUnencryptedAuthentication]
+ [-Authentication <WebAuthenticationType>] [-Credential <PSCredential>] [-UseDefaultCredentials]
+ [-CertificateThumbprint <String>] [-Certificate <X509Certificate>] [-SkipCertificateCheck]
+ [-SslProtocol <WebSslProtocol>] [-Token <SecureString>] [-UserAgent <String>] [-DisableKeepAlive]
+ [-ConnectionTimeoutSeconds <Int32>] [-OperationTimeoutSeconds <Int32>] [-Headers <IDictionary>]
+ [-SkipHeaderValidation] [-AllowInsecureRedirect] [-MaximumRedirection <Int32>]
+ [-MaximumRetryCount <Int32>] [-PreserveAuthorizationOnRedirect] [-RetryIntervalSec <Int32>]
+ -CustomMethod <String> [-PreserveHttpMethodOnRedirect] [-UnixSocket <UnixDomainSocketEndPoint>]
+ [-NoProxy] [-Body <Object>] [-Form <IDictionary>] [-ContentType <String>]
+ [-TransferEncoding <String>] [-InFile <String>] [-OutFile <String>] [-PassThru] [-Resume]
+ [-SkipHttpErrorCheck] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -379,7 +388,38 @@ link.
 (Invoke-WebRequest -Uri 'https://aka.ms/pscore6-docs' -HttpVersion 2.0).Links.Href
 ```
 
+### Example 11: Send a request to a Unix socket application
+
+Some applications, such as Docker, expose a Unix socket for communication. This example queries for
+a list of Docker images using the Docker API. The cmdlet connects to the Docker daemon using the
+Unix socket.
+
+```powershell
+Invoke-WebRequest -Uri "http://localhost/v1.40/images/json/" -UnixSocket "/var/run/docker.sock"
+```
+
 ## PARAMETERS
+
+### -AllowInsecureRedirect
+
+Allows redirecting from HTTPS to HTTP. By default, any request that is redirected from HTTPS to
+HTTP results in an error and the request is aborted to prevent unintentionally communicating in
+plain text over unencrypted connections. To override this behavior at your own risk, use the
+**AllowInsecureRedirect** parameter.
+
+This parameter was added in PowerShell 7.4.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -AllowUnencryptedAuthentication
 
@@ -447,7 +487,9 @@ Specifies the body of the request. The body is the content of the request that f
 You can also pipe a body value to `Invoke-WebRequest`.
 
 The **Body** parameter can be used to specify a list of query parameters or specify the content of
-the response.
+the response. For query parameters, the cmdlet uses the **System.Net.WebUtility.UrlEncode** method
+method to encode the key-value pairs. For more information about encoding strings for URLs, see
+[the UrlEncode() method reference](xref:System.Net.WebUtility.UrlEncode*).
 
 When the input is a POST request and the body is a **String**, the value to the left of the first
 equals sign (`=`) is set as a key in the form data and the remaining text is set as the value. To
@@ -506,11 +548,11 @@ Accept wildcard characters: False
 Specifies the digital public key certificate (X509) of a user account that has permission to send
 the request. Enter the certificate thumbprint of the certificate.
 
-Certificates are used in client certificate-based authentication. They can be mapped only to local
-user accounts; they don't work with domain accounts.
+Certificates are used in client certificate-based authentication. Certificates can only be mapped
+only to local user accounts, not domain accounts.
 
-To get a certificate thumbprint, use the `Get-Item` or `Get-ChildItem` command in the PowerShell
-`Cert:` drive.
+To see the certificate thumbprint, use the `Get-Item` or `Get-ChildItem` command to find the
+certificate in `Cert:\CurrentUser\My`.
 
 > [!NOTE]
 > This feature is only supported on Windows OS platforms.
@@ -519,6 +561,31 @@ To get a certificate thumbprint, use the `Get-Item` or `Get-ChildItem` command i
 Type: System.String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ConnectionTimeoutSeconds
+
+Specifies how long the request can be pending before it times out. Enter a value in seconds. The
+default value, 0, specifies an indefinite time-out.
+
+A Domain Name System (DNS) query can take up to 15 seconds to return or time out. If your request
+contains a host name that requires resolution, and you set **ConnectionTimeoutSeconds** to a value
+greater than zero, but less than 15 seconds, it can take 15 seconds or more before a
+**WebException** is thrown, and your request times out.
+
+This parameter replaced the **TimeoutSec** parameter in PowerShell 7.4. You can use **TimeoutSec**
+as an alias for **ConnectionTimeoutSeconds**.
+
+```yaml
+Type: System.Int32
+Parameter Sets: (All)
+Aliases: TimeoutSec
 
 Required: False
 Position: Named
@@ -537,11 +604,14 @@ format, the default encoding format is used instead. An example of a **ContentTy
 encoding format is `text/plain; charset=iso-8859-5`, which specifies the
 [Latin/Cyrillic](https://www.iso.org/standard/28249.html) alphabet.
 
-If this parameter is omitted and the request method is POST, `Invoke-WebRequest` sets the content
-type to `application/x-www-form-urlencoded`. Otherwise, the content type isn't specified in the
-call.
+If this parameter is omitted and the request method is POST or PUT, `Invoke-WebRequest` sets the
+content type to `application/x-www-form-urlencoded`. Otherwise, the content type isn't specified in
+the call.
 
 **ContentType** is overridden when a **MultipartFormDataContent** object is supplied for **Body**.
+
+Starting in PowerShell 7.4, if you use this both this parameter and the **Headers** parameter to
+define the `Content-Type` header, the value specified in the **ContentType** parameter is used.
 
 ```yaml
 Type: System.String
@@ -683,6 +753,9 @@ Specifies the headers of the web request. Enter a hash table or dictionary.
 Content related headers, such as `Content-Type` are overridden when a **MultipartFormDataContent**
 object is supplied for **Body**.
 
+Starting in PowerShell 7.4, if you use this parameter to define the `Content-Type` header and use
+**ContentType** parameter, the value specified in the **ContentType** parameter is used.
+
 ```yaml
 Type: System.Collections.IDictionary
 Parameter Sets: (All)
@@ -819,14 +892,40 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -OperationTimeoutSeconds
+
+This timeout applies to data reads within a stream, not to the stream time as a whole. The default
+value, 0, specifies an indefinite timeout.
+
+Setting the value to 30 seconds means that any delay of longer than 30 seconds between data in the
+stream terminates the request. A large file that takes several minutes to download won't terminate
+unless the stream stalls for more than 30 seconds.
+
+```yaml
+Type: System.Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -OutFile
 
-Specifies the output file for which this cmdlet saves the response body. Enter a path and filename.
+By default, `Invoke-WebRequest` returns the results to the pipeline. When you use the **OutFile**
+parameter, the results are saved to the specified file and not returned to the pipeline. Enter a
+path and filename. To send the results to a file and to the pipeline, add the **Passthru**
+parameter.
+
 If you omit the path, the default is the current location. The name is treated as a literal path.
 Names that contain brackets (`[]`) must be enclosed in single quotes (`'`).
 
-By default, `Invoke-WebRequest` returns the results to the pipeline. To send the results to a file
-and to the pipeline, use the **Passthru** parameter.
+Starting in PowerShell 7.4, you can specify a folder path without the filename. When you do, the
+command uses the filename from the last segment of the resolved URI after any redirections. When
+you specify a folder path for **OutFile**, you can't use the **Resume** parameter.
 
 ```yaml
 Type: System.String
@@ -844,6 +943,11 @@ Accept wildcard characters: False
 
 Indicates that the cmdlet returns the results, in addition to writing them to a file. This parameter
 is valid only when the **OutFile** parameter is also used in the command.
+
+> [!NOTE]
+> When you use the **PassThru** parameter, the output is written to the pipeline but the file isn't
+> created. This is fixed in PowerShell 7.5-preview.4. For more information, see
+> [PowerShell Issue #15409](https://github.com/PowerShell/PowerShell/issues/15409).
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -866,6 +970,27 @@ parameter disables this logic for cases where the header needs to be sent to the
 location.
 
 This feature was added in PowerShell 6.0.0.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PreserveHttpMethodOnRedirect
+
+Indicates the cmdlet should preserve the method of the request across redirections.
+
+By default, the cmdlet changes the method to `GET` when redirected. Specifying this parameter
+disables this logic to ensure that the intended method can be used with redirection.
+
+This feature was added in PowerShell 7.4.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -1008,10 +1133,15 @@ When you specify a session variable, `Invoke-WebRequest` creates a web request s
 assigns it to a variable with the specified name in your PowerShell session. You can use the
 variable in your session as soon as the command completes.
 
-Unlike a remote session, the web request session isn't a persistent connection. It's an object that
+Before PowerShell 7.4, the web request session isn't a persistent connection. It's an object that
 contains information about the connection and the request, including cookies, credentials, the
 maximum redirection value, and the user agent string. You can use it to share state and data among
 web requests.
+
+Starting in PowerShell 7.4, the web request session is persistent as long as the properties of the
+session aren't overridden in a subsequent request. When they are, the cmdlet recreates the session
+with the new values. The persistent sessions reduce the overhead for repeated requests, making them
+much faster.
 
 To use the web request session in subsequent web requests, specify the session variable in the value
 of the **WebSession** parameter. PowerShell uses the data in the web request session object when
@@ -1133,28 +1263,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -TimeoutSec
-
-Specifies how long the request can be pending before it times out. Enter a value in seconds. The
-default value, 0, specifies an indefinite time-out.
-
-A Domain Name System (DNS) query can take up to 15 seconds to return or time out. If your request
-contains a host name that requires resolution, and you set **TimeoutSec** to a value greater than
-zero, but less than 15 seconds, it can take 15 seconds or more before a **WebException** is thrown,
-and your request times out.
-
-```yaml
-Type: System.Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Token
 
 The OAuth or Bearer token to include in the request. **Token** is required by certain
@@ -1195,6 +1303,27 @@ Type: System.String
 Parameter Sets: (All)
 Aliases:
 Accepted values: chunked, compress, deflate, gzip, identity
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UnixSocket
+Specifies the name of the Unix socket to connect to. This parameter is supported on Unix-based
+systems and Windows version 1803 and later. For more information about Windows support of Unix
+sockets, see the
+[Windows/WSL Interop with AF_UNIX](https://devblogs.microsoft.com/commandline/windowswsl-interop-with-af_unix/)
+blog post.
+
+This parameter was added in PowerShell 7.4.
+
+```yaml
+Type: System.Net.Sockets.UnixDomainSocketEndPoint
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named
@@ -1346,11 +1475,11 @@ PowerShell includes the following aliases for `Invoke-WebRequest`:
 Beginning with PowerShell 6.0.0 `Invoke-WebRequest` supports basic parsing only.
 
 For more information, see
-[BasicHtmlWebResponseObject](/dotnet/api/microsoft.powershell.commands.basichtmlwebresponseobject).
+[BasicHtmlWebResponseObject](xref:Microsoft.PowerShell.Commands.BasicHtmlWebResponseObject).
 
 Because of changes in .NET Core 3.1, PowerShell 7.0 and higher use the
-[HttpClient.DefaultProxy](/dotnet/api/system.net.http.httpclient.defaultproxy?view=netcore-3.1)
-Property to determine the proxy configuration.
+[HttpClient.DefaultProxy](xref:System.Net.Http.HttpClient.DefaultProxy*)
+property to determine the proxy configuration.
 
 The value of this property is determined by your platform:
 
@@ -1369,6 +1498,8 @@ are:
 - `ALL_PROXY`: the hostname or IP address of the proxy server used on HTTP and HTTPS requests in
   case `HTTP_PROXY` or `HTTPS_PROXY` aren't defined.
 - `NO_PROXY`: a comma-separated list of hostnames that should be excluded from proxying.
+
+PowerShell 7.4 added support for the Brotli compression algorithm.
 
 ## RELATED LINKS
 

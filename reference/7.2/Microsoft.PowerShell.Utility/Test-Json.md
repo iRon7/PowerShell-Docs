@@ -2,7 +2,7 @@
 external help file: Microsoft.PowerShell.Commands.Utility.dll-Help.xml
 Locale: en-US
 Module Name: Microsoft.PowerShell.Utility
-ms.date: 12/12/2022
+ms.date: 07/24/2024
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.utility/test-json?view=powershell-7.2&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: Test-Json
@@ -51,7 +51,7 @@ This cmdlet was introduced in PowerShell 6.1
 This example tests whether the input string is a valid JSON document.
 
 ```powershell
-"{'name': 'Ashley', 'age': 25}" | Test-Json
+'{"name": "Ashley", "age": 25}' | Test-Json
 ```
 
 ```Output
@@ -97,16 +97,15 @@ $schema = @'
   }
 }
 '@
-"{'name': 'Ashley', 'age': '25'}" | Test-Json -Schema $schema
+'{"name": "Ashley", "age": "25"}' | Test-Json -Schema $schema
 ```
 
 ```Output
-Test-Json : IntegerExpected: #/age
-At line:1 char:37
-+ "{'name': 'Ashley', 'age': '25'}" | Test-Json -Schema $schema
-+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~
-+ CategoryInfo          : InvalidData: (:) [Test-Json], Exception
-+ FullyQualifiedErrorId : InvalidJsonAgainstSchema,Microsoft.PowerShell.Commands.TestJsonCommand
+Test-Json:
+Line |
+  35 |  '{"name": "Ashley", "age": "25"}' | Test-Json -Schema $schema
+     |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+     | IntegerExpected: #/age
 False
 ```
 
@@ -121,11 +120,13 @@ JSON schema can reference definitions using `$ref` keyword. The `$ref` can resol
 references another file. The **SchemaFile** parameter accepts literal path to the JSON schema file
 and allows JSON files to be validated against such schemas.
 
-In this example we have `schema.json` file which references `definitions.json`.
+In this example the `schema.json` file references `definitions.json`.
 
 ```powershell
-PS> Get-Content schema.json
+Get-Content schema.json
+```
 
+```Output
 {
   "description":"A person",
   "type":"object",
@@ -138,9 +139,13 @@ PS> Get-Content schema.json
     }
   }
 }
+```
 
-PS> Get-Content definitions.json
+```powershell
+Get-Content definitions.json
+```
 
+```Output
 {
   "definitions":{
     "name":{
@@ -154,7 +159,9 @@ PS> Get-Content definitions.json
     }
   }
 }
+```
 
+```powershell
 '{"name": "James", "hobbies": [".NET", "Blogging"]}' | Test-Json -SchemaFile 'schema.json'
 ```
 
@@ -180,7 +187,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 1
+Position: 0
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -188,7 +195,7 @@ Accept wildcard characters: False
 
 ### -Schema
 
-Specifies a schema to validate the JSON input against. If passed, `Test-Json` will validate that the
+Specifies a schema to validate the JSON input against. If passed, `Test-Json` validates that the
 JSON input conforms to the spec specified by the **Schema** parameter and return `$true` only if the
 input conforms to the provided schema.
 
@@ -200,7 +207,7 @@ Parameter Sets: SchemaString
 Aliases:
 
 Required: False
-Position: 2
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -220,7 +227,7 @@ Parameter Sets: SchemaFile
 Aliases:
 
 Required: False
-Position: Named
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -237,7 +244,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.String
 
-You can pipe a JSON string to to this cmdlet.
+You can pipe a JSON string to this cmdlet.
 
 ## OUTPUTS
 
@@ -247,7 +254,7 @@ This cmdlet returns `$true` if the JSON is valid and otherwise `$false`.
 
 ## NOTES
 
-The `Test-Json` cmdlet is implemented by using the
+The `Test-Json` cmdlet is implemented using the
 [NJsonSchema Class](https://github.com/RSuter/NJsonSchema).
 
 Since PowerShell 6, PowerShell uses the Newtonsoft.Json assemblies for all JSON functions.

@@ -2,7 +2,7 @@
 external help file: Microsoft.PowerShell.Commands.Utility.dll-Help.xml
 Locale: en-US
 Module Name: Microsoft.PowerShell.Utility
-ms.date: 11/29/2022
+ms.date: 11/29/2023
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.utility/convertfrom-json?view=powershell-7.4&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: ConvertFrom-Json
@@ -26,7 +26,7 @@ custom **PSObject** or **Hashtable** object that has a property for each field i
 JSON is commonly used by web sites to provide a textual representation of objects. The cmdlet adds
 the properties to the new object as it processes each line of the JSON string.
 
-The JSON standard allows duplicate key names, which are prohibited in **PSObject** end **Hashtable**
+The JSON standard allows duplicate key names, which are prohibited in **PSObject** and **Hashtable**
 types. For example, if the JSON string contains duplicate keys, only the last key is used by this
 cmdlet. See other examples below.
 
@@ -137,7 +137,7 @@ integer.
 
 ### -AsHashtable
 
-Converts the JSON to an hash table object. This switch was introduced in PowerShell 6.0. Starting
+Converts the JSON to a hash table object. This switch was introduced in PowerShell 6.0. Starting
 with PowerShell 7.3, the object is an **OrderedHashtable** and preserves the ordering of the keys
 from the JSON. In prior versions, the object is a **Hashtable**.
 

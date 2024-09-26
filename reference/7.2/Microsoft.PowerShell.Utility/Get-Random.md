@@ -2,7 +2,7 @@
 external help file: Microsoft.PowerShell.Commands.Utility.dll-Help.xml
 Locale: en-US
 Module Name: Microsoft.PowerShell.Utility
-ms.date: 12/12/2022
+ms.date: 12/11/2023
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.utility/get-random?view=powershell-7.2&WT.mc_id=ps-gethelp
 schema: 2.0.0
 title: Get-Random
@@ -18,7 +18,8 @@ Gets a random number, or selects objects randomly from a collection.
 ### RandomNumberParameterSet (Default)
 
 ```
-Get-Random [-SetSeed <Int32>] [[-Maximum] <Object>] [-Minimum <Object>] [-Count <Int32>] [<CommonParameters>]
+Get-Random [-SetSeed <Int32>] [[-Maximum] <Object>] [-Minimum <Object>] [-Count <Int32>]
+ [<CommonParameters>]
 ```
 
 ### RandomListItemParameterSet
@@ -39,22 +40,22 @@ The `Get-Random` cmdlet gets a randomly selected number. If you submit a collect
 `Get-Random`, it gets one or more randomly selected objects from the collection.
 
 Without parameters or input, a `Get-Random` command returns a randomly selected 32-bit unsigned
-integer between 0 (zero) and **Int32.MaxValue** (`0x7FFFFFFF`, `2,147,483,647`).
-
-By default, `Get-Random` generates cryptographically secure randomness using the
-[RandomNumberGenerator](/dotnet/api/system.security.cryptography.randomnumbergenerator) class.
+integer between 0 (zero) and `[int32]::MaxValue`.
 
 You can use the parameters of `Get-Random` to specify the minimum and maximum values, the number of
 objects returned from a collection, or a seed number.
 
 > [!CAUTION]
-> Setting the seed deliberately results in non-random, repeatable behavior. It should only be used
-> when trying to reproduce behavior, such as when debugging or analyzing a script that includes
-> `Get-Random` commands.
+> `Get-Random` doesn't ensure cryptographically secure randomness. The seed value is used for the
+> current command and for all subsequent `Get-Random` commands in the current session until you use
+> **SetSeed** again or close the session. You can't reset the seed to its default value.
 >
-> This seed value is used for the current command and for all subsequent `Get-Random` commands in
-> the current session until you use **SetSeed** again or close the session. You can't reset the seed
-> to its default value.
+> Deliberately setting the seed results in non-random, repeatable behavior. It should only be used
+> when trying to reproduce behavior, such as when debugging or analyzing a script that includes
+> `Get-Random` commands. Be aware that the seed value could be set by other code in the same
+> session, such as an imported module.
+>
+> PowerShell 7.4 includes `Get-SecureRandom`, which ensures cryptographically secure randomness.
 
 ## EXAMPLES
 
@@ -92,7 +93,7 @@ Get-Random -Minimum -100 -Maximum 100
 
 ### Example 4: Get a random floating-point number
 
-This command gets a random floating-point number greater than or equal to 10.7 and less than 20.92.
+This command gets a random floating-point number greater than or equal to 10.7 and less than 20.93.
 
 ```powershell
 Get-Random -Minimum 10.7 -Maximum 20.93
@@ -174,23 +175,23 @@ Get-Random -Maximum 100
 ```
 
 ```Output
-74
-56
-84
-46
+32
+25
+93
+95
 ```
 
 ```powershell
-# Commands with the same seed are not random
+# Commands with the same seed aren't random
 Get-Random -Maximum 100 -SetSeed 23
 Get-Random -Maximum 100 -SetSeed 23
 Get-Random -Maximum 100 -SetSeed 23
 ```
 
 ```Output
-74
-74
-74
+32
+32
+32
 ```
 
 ```powershell
@@ -202,10 +203,10 @@ Get-Random -Maximum 100
 ```
 
 ```Output
-74
-56
-84
-46
+32
+25
+93
+95
 ```
 
 ### Example 10: Get random files
@@ -264,17 +265,20 @@ In this example, the **InputObject** parameter specifies an array that contains 
 Get-Random -InputObject @('a','',$null)
 ```
 
-`Get-Random` will return either `a`, empty string, or `$null`. The empty sting displays as a blank
-line and `$null` returns to a PowerShell prompt.
+`Get-Random` returns either `a`, empty string, or `$null`. The empty sting displays as a blank line
+and `$null` returns to a PowerShell prompt.
 
 ## PARAMETERS
 
 ### -Count
 
-Specifies the number of random objects or numbers to return. The default is 1.
+Specifies the number of random objects to return. The default is 1.
 
-When used with `InputObject`, if the value of **Count** exceeds the number of objects in the
-collection, `Get-Random` returns all of the objects in random order.
+When used with `InputObject` containing a collection:
+
+- Each randomly selected item is returned only once.
+- If the value of **Count** exceeds the number of objects in the collection, all objects in the
+  collection are returned in random order.
 
 ```yaml
 Type: System.Int32
@@ -312,7 +316,7 @@ Accept wildcard characters: False
 
 ### -Maximum
 
-Specifies a maximum value for the random number. `Get-Random` returns a value that is less than the
+Specifies a maximum value for the random number. `Get-Random` returns a value that's less than the
 maximum (not equal). Enter an integer, a double-precision floating-point number, or an object that
 can be converted to an integer or double, such as a numeric string ("100").
 
@@ -362,9 +366,8 @@ Accept wildcard characters: False
 
 ### -SetSeed
 
-Specifies a seed value for the random number generator. When you use **SetSeed**, the cmdlet uses
-the [System.Random](/dotnet/api/system.random) method to generate pseudorandom numbers, which is not
-cryptographically secure.
+Specifies a seed value for the random number generator. When you use **SetSeed**, the cmdlet
+generates pseudorandom numbers, which isn't cryptographically secure.
 
 > [!CAUTION]
 > Setting the seed results in non-random behavior. It should only be used when trying to reproduce
@@ -430,10 +433,7 @@ submitted collection.
 
 ## NOTES
 
-By default, `Get-Random` generates cryptographically secure randomness using the
-[RandomNumberGenerator](/dotnet/api/system.security.cryptography.randomnumbergenerator) class.
-
-`Get-Random` does not alway return the same data type as the input value. The following table shows
+`Get-Random` doesn't always return the same data type as the input value. The following table shows
 the output type for each of the numeric input types.
 
 | Input Type | Output Type |
@@ -458,7 +458,3 @@ versions, only the **Maximum** parameter in the **RandomNumberParameterSet** par
 an empty string or `$null`.
 
 ## RELATED LINKS
-
-[System.Security.Cryptography.RandomNumberGenerator()](/dotnet/api/system.security.cryptography.randomnumbergenerator)
-
-[System.Random](/dotnet/api/system.random)

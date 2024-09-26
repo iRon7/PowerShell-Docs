@@ -4,7 +4,7 @@ Locale: en-US
 ms.date: 07/18/2022
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_member-access_enumeration?view=powershell-5.1&WT.mc_id=ps-gethelp
 schema: 2.0.0
-title: about Member-Access Enumeration
+title: about_Member-Access_Enumeration
 ---
 # about_Member-Access_Enumeration
 
@@ -82,7 +82,7 @@ of the property for each item that has that property. If no items have the
 specified property, the operator returns `$null`.
 
 During member-access enumeration for a method, the operator attempts to call the
-method on each item in the collection. If any item in the collection does does
+method on each item in the collection. If any item in the collection does
 not have the specified method, the operator returns the **MethodNotFound**
 exception.
 

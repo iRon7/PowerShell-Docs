@@ -2,9 +2,9 @@
 description: Describes a **CimSession** object and the difference between CIM sessions and PowerShell sessions.
 Locale: en-US
 ms.date: 03/07/2022
-online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_cimsession?view=powershell-7&WT.mc_id=ps-gethelp
+online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_cimsession?view=powershell-7.4&WT.mc_id=ps-gethelp
 schema: 2.0.0
-title: about CimSession
+title: about_CimSession
 ---
 # about_CimSession
 

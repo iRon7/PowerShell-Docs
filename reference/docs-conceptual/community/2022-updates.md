@@ -1,6 +1,6 @@
 ---
 description: List of changes to the PowerShell documentation for 2022
-ms.date: 02/02/2023
+ms.date: 06/28/2023
 title: What's New in PowerShell-Docs for 2022
 ---
 # What's new in PowerShell Docs for 2022
@@ -351,9 +351,9 @@ New content
 
 Content updates
 
-- Rewrote the install instructions for [PowerShellGet](/powershell/scripting/gallery/installing-psget)
+- Rewrote the install instructions for [PowerShellGet](/powershell/gallery/powershellget/install-powershellget)
 - Created separate article for
-  [Installing PowerShellGet on older Windows systems](/powershell/scripting/gallery/install-on-older-systems)
+  [Installing PowerShellGet on older Windows systems](/powershell/gallery/powershellget/install-on-older-systems)
 
 Other projects
 

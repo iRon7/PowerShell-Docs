@@ -5,7 +5,7 @@ ms.date: 03/01/2023
 no-loc: [482gb]
 online version: https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_numeric_literals?view=powershell-5.1&WT.mc_id=ps-gethelp
 schema: 2.0.0
-title: about Numeric Literals
+title: about_Numeric_Literals
 ---
 # about_Numeric_Literals
 
@@ -198,7 +198,7 @@ supported. Those additional formats are not recognized as literals.
 
 ### Commands that look like numeric literals
 
-Any command that looks like a numeric literal must be executed using the the
+Any command that looks like a numeric literal must be executed using the
 call operator (`&`), otherwise it is interpreted as a number of the associated
 type.
 
